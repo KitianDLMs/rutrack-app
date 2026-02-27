@@ -1,0 +1,54 @@
+{
+  "project_info": {
+    "project_number": "538000452693",
+    "project_id": "ecocarga-drive",
+    "storage_bucket": "ecocarga-drive.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:538000452693:android:f0634f8c38ef09fda738dc",
+        "android_client_info": {
+          "package_name": "com.echnelapp.localdriver"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "538000452693-cnlpcv3m0ojg0qsfb89ncl1j60b1ndrr.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.echnelapp.localdriver",
+            "certificate_hash": "8c8673bef519b6856f0a40b2439a6c2cc91dfb5a"
+          }
+        },
+        {
+          "client_id": "538000452693-1v6jbd9oardl19hg1dmtsbefaea9onm3.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAqc01CoFjx03-U1s-cC78JHzzOH5DAY40"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "538000452693-1v6jbd9oardl19hg1dmtsbefaea9onm3.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "538000452693-1mnkpjekh32h1a1gsg54hp479khfee78.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.echnelapp.localdriver"
+              }
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
