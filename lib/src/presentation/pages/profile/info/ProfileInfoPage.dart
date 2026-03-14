@@ -14,10 +14,31 @@ class ProfileInfoPage extends StatefulWidget {
 class _ProfileInfoPageState extends State<ProfileInfoPage> {
   @override
   Widget build(BuildContext context) {
-    return Scaffold(body: BlocBuilder<ProfileInfoBloc, ProfileInfoState>(
-      builder: (context, state) {
-        return ProfileInfoContent(state.user);
-      },
-    ));
+
+    return Scaffold(
+      body: BlocListener<ProfileInfoBloc, ProfileInfoState>(
+        listener: (context, state) {
+          if (state.success == true) {
+            ScaffoldMessenger.of(context).showSnackBar(
+              SnackBar(content: Text('Cuenta eliminada correctamente')),
+            );
+            Navigator.pushNamedAndRemoveUntil(
+              context,
+              'client/home/tut',
+              (route) => false
+            );
+          }
+        },
+        child: BlocBuilder<ProfileInfoBloc, ProfileInfoState>(
+          builder: (context, state) {
+
+            if (state.success == true) {
+              return SizedBox();
+            }
+            return ProfileInfoContent(state.user);
+          },
+        ),
+      ),
+    );
   }
 }

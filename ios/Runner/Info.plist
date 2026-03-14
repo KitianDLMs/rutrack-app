@@ -19,7 +19,7 @@
 	</array>
 	<!-- End of the Google Sign-in Section -->
 	<key>NSLocationWhenInUseUsageDescription</key>
-	<string>Esta aplicación necesita acceder a tu ubicación mientras la usas para mostrar tu posición en el mapa.</string>
+	<string>RuTrack utiliza tu ubicación para mostrar tu posición en el mapa, calcular rutas de transporte y conectar usuarios con conductores cercanos. </string>
 	<key>NSLocationAlwaysAndWhenInUseUsageDescription</key>
 	<string>Esta aplicación utiliza tu ubicación para mejorar la precisión del servicio.</string>
 	<key>NSLocalNetworkUsageDescription</key>
@@ -73,8 +73,6 @@
 	<true/>
 	<key>NSPhotoLibraryUsageDescription</key>
 	<string>Esta aplicacion requiere acceso a la galeria de fotos</string>
-	<key>NSCameraUsageDescription</key>
-	<string>Esta aplicacion requiere acceso a la camara</string>
 </dict>
 </plist>
 

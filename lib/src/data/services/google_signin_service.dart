@@ -3,8 +3,6 @@ import 'package:google_sign_in/google_sign_in.dart';
 import 'package:http/http.dart';
 import 'dart:convert';
 
-import 'dart:developer' as developer;
-
 import 'package:localdriver/src/domain/models/AuthResponse.dart';
 
 class GoogleSignInService {
@@ -12,10 +10,7 @@ class GoogleSignInService {
   static GoogleSignIn _buildGoogleSignIn() {
     if (Platform.isAndroid) {
       return GoogleSignIn(
-        scopes: ['email', 'profile'],
-        serverClientId:
-            '538000452693-1v6jbd9oardl19hg1dmtsbefaea9onm3.apps.googleusercontent.com',
-            forceCodeForRefreshToken: true,
+        scopes: ['email', 'profile']
       );
     }
 
@@ -32,7 +27,7 @@ class GoogleSignInService {
       if (account == null) return null;
 
       final auth = await account.authentication;
-      final googleToken = auth.idToken!;
+      final googleToken = auth.idToken;
 
       final url = Uri(
         scheme: 'https',

@@ -6,7 +6,7 @@ import 'package:http/http.dart' as http;
 
 class AppleSignInService {
   static String clientId = 'com.echnelapp.flsigninapple';
-  static String redirectUri = 'https://localdriver.onrender.com/auth/apple-callback';
+  static String redirectUri = 'https://localdriver.onrender.com/auth/apple-callback';                            
 
   static Future<AuthResponse?> signInWithApple() async {
     try {
@@ -34,10 +34,9 @@ class AppleSignInService {
           'code': credential.authorizationCode,
           'firstName': credential.givenName,
           'lastName': credential.familyName,
-          'useBundleId': Platform.isIOS,
+          'useBundleId': Platform.isIOS ? 'true' : 'false',          
         }),
       );
-
       final data = jsonDecode(response.body);
       if (data['user'] != null) {
         print("dataok ${data}");

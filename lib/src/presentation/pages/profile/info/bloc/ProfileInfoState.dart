@@ -1,21 +1,22 @@
-import 'package:equatable/equatable.dart';
 import 'package:localdriver/src/domain/models/user.dart';
 
-class ProfileInfoState extends Equatable {
+class ProfileInfoState {
 
   final User? user;
+  final bool success;
 
-  ProfileInfoState({this.user});
+  ProfileInfoState({
+    this.user,
+    this.success = false
+  });
 
   ProfileInfoState copyWith({
-    User? user
+    User? user,
+    bool? success
   }) {
     return ProfileInfoState(
-      user: user
+      user: user ?? this.user,
+      success: success ?? this.success
     );
   }
-
-  @override
-  List<Object?> get props => [user];
-
 }

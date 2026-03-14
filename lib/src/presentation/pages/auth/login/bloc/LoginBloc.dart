@@ -96,7 +96,6 @@ class LoginBloc extends Bloc<LoginEvent, LoginState> {
             sound: true,
           );
 
-          // 2️⃣ Esperar APNS token (iOS)
           String? apnsToken;
           int retries = 0;
 
@@ -108,7 +107,6 @@ class LoginBloc extends Bloc<LoginEvent, LoginState> {
 
           print("APNS TOKEN: $apnsToken");
 
-          // 3️⃣ Obtener FCM token
           String? token = await FirebaseMessaging.instance.getToken();
           print("FCM TOKEN: $token");
         }

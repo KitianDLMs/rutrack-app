@@ -18,6 +18,7 @@ class ClientHomeBloc extends Bloc<ClientHomeEvent, ClientHomeState> {
 
     on<Logout>((event, emit) async {
       await authUseCases.logout.run();
+      emit(LoggedOutState()); 
     });
   }
 

@@ -18,3 +18,5 @@ class ClientHomeState extends Equatable {
   List<Object?> get props => [pageIndex];
 
 }
+
+class LoggedOutState extends ClientHomeState {}  

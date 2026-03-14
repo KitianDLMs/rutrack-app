@@ -54,4 +54,25 @@ class AuthService {
     }
   }
 
+  Future<Resource<String>> delete(String userId) async {
+    try {      
+      Uri url = Uri.https(ApiConfig.API_PROJECT, '/auth/delete-account');
+      Map<String, String> headers = {
+        'Content-Type': 'application/json',
+        // 'Authorization': 'Bearer $sessionToken', // Token de autenticación
+      };
+
+      final response = await http.delete(url, headers: headers);
+
+      final data = json.decode(response.body);
+
+      if (response.statusCode == 200) {
+        return Success('Cuenta eliminada correctamente');
+      } else {
+        return ErrorData(data['message'] ?? 'Error al eliminar la cuenta');
+      }
+    } catch (e) {
+      return ErrorData(e.toString());
+    }
+  }
 }

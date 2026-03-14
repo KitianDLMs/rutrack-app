@@ -28,10 +28,10 @@ Future<void> setupFlutterNotifications() async {
     return;
   }
   channel = const AndroidNotificationChannel(
-    'high_importance_channel', // id
-    'High Importance Notifications', // title
+    'high_importance_channel',
+    'High Importance Notifications',
     description:
-        'This channel is used for important notifications.', // description
+        'This channel is used for important notifications.',
     importance: Importance.high,
   );
 
@@ -51,7 +51,7 @@ Future<void> setupFlutterNotifications() async {
    print('---------- NOTIFICACION PRIMER PLANO -----------');
    print('DATA FOREGROUND : ${message.data}');
    print('NOTIFICATION FOREGROUND: ${message.notification?.title}');
-   print('NOTIFICATION FOREGROUND: ${message.notification?.body}');
+   print('NOTIFICATION FOREGROUND BODY: ${message.notification?.body}');
    RemoteNotification? notification = message.notification;
    AndroidNotification? android = message.notification?.android;
    if (notification != null && android != null && !kIsWeb) {

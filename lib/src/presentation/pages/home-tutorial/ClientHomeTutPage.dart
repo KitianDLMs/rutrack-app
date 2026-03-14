@@ -14,6 +14,8 @@ import 'package:localdriver/src/presentation/pages/client/mapSeeker/ClientMapSee
 import 'package:localdriver/src/presentation/pages/profile/info/ProfileInfoPage.dart';
 import 'package:localdriver/src/presentation/pages/roles/RolesPage.dart';
 import 'package:sign_in_with_apple/sign_in_with_apple.dart';
+import 'package:url_launcher/url_launcher.dart';
+import 'package:url_launcher/url_launcher_string.dart';
 
 class ClientHomeTutPage extends StatefulWidget {
   const ClientHomeTutPage({super.key});
@@ -26,7 +28,7 @@ class _ClientHomeTutPageState extends State<ClientHomeTutPage> {
   final PageController _pageController = PageController();
   int _currentPage = 0;
 
-  final Widget initialAppPage = ClientHomePage();
+  final Widget initialAppPage = ClientHomePage();  
 
   List<Widget> pageList = <Widget>[
     ClientMapSeekerPage(),
@@ -34,6 +36,17 @@ class _ClientHomeTutPageState extends State<ClientHomeTutPage> {
     ProfileInfoPage(),
     RolesPage(),
   ];
+
+  final Uri _termsAndConditionsUrl = Uri.parse('https://rutrack-poli-terms.netlify.app');
+
+  Future<void> _launchTermsAndConditions() async {
+    if (!await launchUrl(
+      _termsAndConditionsUrl,
+      mode: LaunchMode.externalApplication,
+    )) {
+      debugPrint("No se pudo abrir $_termsAndConditionsUrl");
+    }
+  }
 
   @override
   void dispose() {
@@ -50,11 +63,12 @@ class _ClientHomeTutPageState extends State<ClientHomeTutPage> {
   }
 
   void _skipTutorial() {
-    Navigator.pushAndRemoveUntil(
-      context,
-      MaterialPageRoute(builder: (context) => initialAppPage),
-      (route) => false,
-    );
+    Navigator.pushReplacementNamed(context, 'client/home');
+    // Navigator.pushAndRemoveUntil(
+    //   context,
+    //   MaterialPageRoute(builder: (context) => initialAppPage),
+    //   (route) => false,
+    // );
   }
 
   @override
@@ -175,7 +189,7 @@ class _ClientHomeTutPageState extends State<ClientHomeTutPage> {
                 ),
                 const SizedBox(height: 16),
                 GestureDetector(
-                  onTap: () {},
+                  onTap: _launchTermsAndConditions,
                   child: const Text(
                     "Términos y Condiciones",
                     style: TextStyle(

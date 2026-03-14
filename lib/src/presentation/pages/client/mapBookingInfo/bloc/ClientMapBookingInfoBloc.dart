@@ -83,27 +83,45 @@ class ClientMapBookingInfoBloc extends Bloc<ClientMapBookingInfoEvent, ClientMap
       );
     });
 
-    on<CreateClientRequest>((event, emit) async {
-      AuthResponse authResponse = await authUseCases.getUserSession.run();
+   on<CreateClientRequest>((event, emit) async {
 
-      Resource<int> response = await clientRequestsUseCases.createClientRequest.run(
-        ClientRequest(
-          idClient: authResponse.user.id!, 
-          fareOffered: double.parse(state.fareOffered.value), 
-          pickupDescription: state.pickUpDescription, 
-          destinationDescription: state.destinationDescription, 
-          pickupLat: state.pickUpLatLng!.latitude, 
-          pickupLng: state.pickUpLatLng!.longitude, 
-          destinationLat: state.destinationLatLng!.latitude, 
-          destinationLng: state.destinationLatLng!.longitude
-        )
-      );
+      print("CLICK CREATE REQUEST");
 
-      emit(
-        state.copyWith(
-          responseClientRequest: response
-        )
-      );
+      emit(state.copyWith(responseClientRequest: Loading()));
+
+      try {
+
+        AuthResponse authResponse = await authUseCases.getUserSession.run();
+
+        print("USER ID: ${authResponse.user.id}");
+
+        print("FARE: ${state.fareOffered.value}");
+
+        Resource<int> response = await clientRequestsUseCases.createClientRequest.run(
+          ClientRequest(
+            idClient: authResponse.user.id!, 
+            fareOffered: double.tryParse(state.fareOffered.value) ?? 0, 
+            pickupDescription: state.pickUpDescription, 
+            destinationDescription: state.destinationDescription, 
+            pickupLat: state.pickUpLatLng!.latitude, 
+            pickupLng: state.pickUpLatLng!.longitude, 
+            destinationLat: state.destinationLatLng!.latitude, 
+            destinationLng: state.destinationLatLng!.longitude
+          )
+        );
+
+        print("RESPONSE: $response");
+
+        emit(
+          state.copyWith(
+            responseClientRequest: response
+          )
+        );
+
+      } catch(e) {
+        print("ERROR CREATE REQUEST: $e");
+      }
+
     });
 
     on<EmitNewClientRequestSocketIO>((event, emit) {

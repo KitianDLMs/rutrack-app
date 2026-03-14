@@ -2,9 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:localdriver/blocSocketIO/BlocSocketIO.dart';
 import 'package:localdriver/blocSocketIO/BlocSocketIOEvent.dart';
-import 'package:localdriver/main.dart';
-import 'package:localdriver/src/presentation/pages/auth/login/LoginContent.dart';
-import 'package:localdriver/src/presentation/pages/auth/login/LoginPage.dart';
+import 'package:localdriver/src/data/dataSource/local/SharefPref.dart' as sharedPref;
 import 'package:localdriver/src/presentation/pages/client/historyTrip/ClientHistoryTripPage.dart';
 import 'package:localdriver/src/presentation/pages/client/home/bloc/ClientHomeBloc.dart';
 import 'package:localdriver/src/presentation/pages/client/home/bloc/ClientHomeEvent.dart';
@@ -22,12 +20,27 @@ class ClientHomePage extends StatefulWidget {
 }
 
 class _ClientHomePageState extends State<ClientHomePage> {
+  bool isLogged = false;
   List<Widget> pageList = <Widget>[
     ClientMapSeekerPage(),
     ClientHistoryTripPage(),
     ProfileInfoPage(),
     RolesPage(),
   ];
+
+  @override
+  void initState() {
+    super.initState();
+    _checkSession();
+  }
+
+
+  void _checkSession() async {    
+    final token = await sharedPref.SharefPref().read('user');
+    setState(() {
+      isLogged = token != null;
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -90,6 +103,7 @@ class _ClientHomePageState extends State<ClientHomePage> {
                     Navigator.pop(context);
                   },
                 ),
+                if (isLogged)
                 ListTile(
                   title: Text('Historial de viajes'),
                   selected: state.pageIndex == 1,
@@ -100,6 +114,7 @@ class _ClientHomePageState extends State<ClientHomePage> {
                     Navigator.pop(context);
                   },
                 ),
+                if (isLogged)
                 ListTile(
                   title: Text('Perfil del usuario'),
                   selected: state.pageIndex == 2,
@@ -120,17 +135,59 @@ class _ClientHomePageState extends State<ClientHomePage> {
                     Navigator.pop(context);
                   },
                 ),
+                if(isLogged)
                 ListTile(
                   title: Text('Cerrar sesion'),
                   onTap: () {
-                    // context.read<ClientHomeBloc>().add(Logout());
-                    // context.read<BlocSocketIO>().add(DisconnectSocketIO());
+                    showDialog(
+                      context: context,
+                      builder: (context) {
+                        return AlertDialog(
+                          title: Text('Cerrar sesión'),
+                          content: Text('¿Estás seguro que quieres salir de la app Rutrack?'),
+                          actions: [
+
+                            TextButton(
+                              onPressed: () {
+                                Navigator.pop(context);
+                              },
+                              child: Text('Cancelar'),
+                            ),
+                            TextButton(
+                              child: Text(
+                                'Sí, salir',
+                                style: TextStyle(color: Colors.red),
+                              ),
+                              onPressed: () {
+                                 Navigator.pop(context);
+
+                                context.read<ClientHomeBloc>().add(Logout());
+                                context.read<BlocSocketIO>().add(DisconnectSocketIO());
+
+                                Navigator.pushAndRemoveUntil(
+                                  context,
+                                  MaterialPageRoute(builder: (context) => ClientHomeTutPage()),
+                                  (route) => false,
+                                );
+                              },
+                            ),               
+
+                          ],
+                        );
+                      },
+                    );
+                  },
+                ),
+                if(!isLogged)
+                ListTile(
+                  title: Text('Salir'),
+                  onTap: () {
                     Navigator.pushAndRemoveUntil(
                         context,
                         MaterialPageRoute(builder: (context) => ClientHomeTutPage()),
                         (route) => false);
                   },
-                )
+                ),
               ],
             ),
           );

@@ -22,6 +22,22 @@
           }
         },
         {
+          "client_id": "538000452693-qngmualrmuq0rtgopsqojkr7k1kpojam.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.echnelapp.localdriver",
+            "certificate_hash": "029763dce28b05924c86558839a7e440b34b8549"
+          }
+        },
+        {
+          "client_id": "538000452693-qvqh8si2hk1dlkgpkgpdrmff5l6vdibc.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.echnelapp.localdriver",
+            "certificate_hash": "a258c3856431eccb1558b4de919186b0cf36d3c1"
+          }
+        },
+        {
           "client_id": "538000452693-1v6jbd9oardl19hg1dmtsbefaea9onm3.apps.googleusercontent.com",
           "client_type": 3
         }

@@ -25,6 +25,7 @@ import 'package:localdriver/src/domain/repository/GeolocatorRepository.dart';
 import 'package:localdriver/src/domain/repository/SocketRepository.dart';
 import 'package:localdriver/src/domain/repository/UsersRepository.dart';
 import 'package:localdriver/src/domain/useCases/auth/AuthUseCases.dart';
+import 'package:localdriver/src/domain/useCases/auth/DeleteUserUseCase.dart';
 import 'package:localdriver/src/domain/useCases/auth/GetUserSessionUseCase.dart';
 import 'package:localdriver/src/domain/useCases/auth/LoginUseCase.dart';
 import 'package:localdriver/src/domain/useCases/auth/LogoutUseCase.dart';
@@ -140,7 +141,7 @@ abstract class AppModule {
     register: RegisterUseCase(authRepository),
     saveUserSession: SaveUserSessionUseCase(authRepository),
     getUserSession: GetUserSessionUseCase(authRepository),
-    logout: LogoutUseCase(authRepository)
+    logout: LogoutUseCase(authRepository), deleteUser: DeleteUserUseCase(authRepository)
   );
 
    @injectable

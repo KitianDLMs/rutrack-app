@@ -70,14 +70,14 @@ class ClientMapTripBloc extends Bloc<ClientMapTripEvent, ClientMapTripState> {
     });
 
     on<AddMarkerDriver>((event, emit) async{
-      BitmapDescriptor driverDescriptor = await geolocatorUseCases.createMarker.run('assets/img/car_pin.png');
+      BitmapDescriptor descriptor = BitmapDescriptor.defaultMarker;
       Marker marker = geolocatorUseCases.getMarker.run(
         'driver',
         event.lat,
         event.lng,
         'Tu conductor',
         '',
-        driverDescriptor
+        descriptor
       );
       emit(
         state.copyWith(

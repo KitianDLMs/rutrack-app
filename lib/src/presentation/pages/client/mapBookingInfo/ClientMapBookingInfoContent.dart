@@ -129,6 +129,7 @@ class ClientMapBookingInfoContent extends StatelessWidget {
             'BUSCAR CONDUCTOR',
             Icons.search,
             () {
+              print('CLICK BUSCAR CONDUCTOR');
               context.read<ClientMapBookingInfoBloc>().add(CreateClientRequest());
             }
           )

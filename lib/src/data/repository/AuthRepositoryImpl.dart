@@ -41,5 +41,20 @@ class AuthRepositoryImpl implements AuthRepository {
   Future<bool> logout() async {
     return await sharefPref.remove('user');
   }
+  
+  @override
+  Future<void> delete(String id) async {
+    try {
+      // 1. Llamar al servicio de eliminación en el backend (si existe)
+      await authService.delete(id);  // Aquí se llama al método deleteUser de AuthService
+
+      // 2. Eliminar los datos de sesión localmente
+      await sharefPref.remove('user');  // Elimina la información de usuario almacenada
+
+      // Aquí también podrías agregar otras operaciones, como eliminar tokens o realizar limpieza adicional.
+    } catch (e) {
+      throw Exception('Error al eliminar usuario: $e');
+    }
+  }
 
 }

@@ -26,41 +26,52 @@ class _ClientMapBookingInfoPageState extends State<ClientMapBookingInfoPage> {
 
   @override
   void initState() {
-    // TODO: implement initState
     super.initState();
-    WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
-      context
-          .read<ClientMapBookingInfoBloc>()
-          .add(ClientMapBookingInfoInitEvent(
-            pickUpLatLng: pickUpLatLng!,
-            destinationLatLng: destinationLatLng!,
-            pickUpDescription: pickUpDestination!,
-            destinationDescription: destinationDescription!,
-          ));
+
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      final arguments =
+          ModalRoute.of(context)!.settings.arguments as Map<String, dynamic>;
+
+      pickUpLatLng = arguments['pickUpLatLng'];
+      destinationLatLng = arguments['destinationLatLng'];
+      pickUpDestination = arguments['pickUpDescription'];
+      destinationDescription = arguments['destinationDescription'];
+
+      context.read<ClientMapBookingInfoBloc>().add(
+            ClientMapBookingInfoInitEvent(
+              pickUpLatLng: pickUpLatLng!,
+              destinationLatLng: destinationLatLng!,
+              pickUpDescription: pickUpDestination!,
+              destinationDescription: destinationDescription!,
+            ),
+          );
+
       context.read<ClientMapBookingInfoBloc>().add(GetTimeAndDistanceValues());
       context.read<ClientMapBookingInfoBloc>().add(AddPolyline());
-      context.read<ClientMapBookingInfoBloc>().add(ChangeMapCameraPosition(
-          lat: pickUpLatLng!.latitude, lng: pickUpLatLng!.longitude));
+
+      context.read<ClientMapBookingInfoBloc>().add(
+            ChangeMapCameraPosition(
+              lat: pickUpLatLng!.latitude,
+              lng: pickUpLatLng!.longitude,
+            ),
+          );
     });
   }
 
   @override
   Widget build(BuildContext context) {
-    Map<String, dynamic> arguments =
-        ModalRoute.of(context)?.settings.arguments as Map<String, dynamic>;
-    pickUpLatLng = arguments['pickUpLatLng'];
-    destinationLatLng = arguments['destinationLatLng'];
-    pickUpDestination = arguments['pickUpDescription'];
-    destinationDescription = arguments['destinationDescription'];
     return Scaffold(
       body: BlocListener<ClientMapBookingInfoBloc, ClientMapBookingInfoState>(
         listener: (context, state) {
           final responseClientRequest = state.responseClientRequest;
-          if (responseClientRequest is Success) {
+          print('responseClientRequest-> $responseClientRequest');
+          if (responseClientRequest is Success<int>) {
             int idClientRequest = responseClientRequest.data;
-            context.read<ClientMapBookingInfoBloc>().add(EmitNewClientRequestSocketIO(idClientRequest: idClientRequest));
-            // Navigator.pushNamedAndRemoveUntil(context, 'client/driver/offers', (route) => false);
-            Navigator.pushNamed(context, 'client/driver/offers', arguments: idClientRequest);
+            Navigator.pushNamed(
+              context,
+              'client/driver/offers',
+              arguments: idClientRequest,
+            );
             Fluttertoast.showToast(msg: 'Solicitud enviada', toastLength: Toast.LENGTH_LONG);
           }
         },

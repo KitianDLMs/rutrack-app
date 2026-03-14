@@ -39,7 +39,7 @@ class GeolocatorRepositoryImpl implements GeolocatorRepository {
   Future<BitmapDescriptor> createMarkerFromAsset(String path) async {
     ImageConfiguration configuration = ImageConfiguration();
     BitmapDescriptor descriptor =
-        await BitmapDescriptor.fromAssetImage(configuration, path);
+        await BitmapDescriptor.asset(configuration, path);
     return descriptor;
   }
 
@@ -124,11 +124,11 @@ class GeolocatorRepositoryImpl implements GeolocatorRepository {
       wayPoints: [
         PolylineWayPoint(location: "Santiago, Chile"),
       ],      
-      // apiKey: API_KEY_GOOGLE,
     );
 
     final result = await polylinePoints.getRouteBetweenCoordinates(
       request: request,
+      googleApiKey: API_KEY_GOOGLE
     );
 
     List<LatLng> polylineCoordinates = [];

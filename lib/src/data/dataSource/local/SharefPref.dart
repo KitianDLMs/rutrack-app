@@ -22,6 +22,11 @@ class SharefPref {
     return prefs.remove(key);
   }
 
+  Future<void> clear() async {
+    final prefs = await SharedPreferences.getInstance();
+    await prefs.clear();
+  }
+
   Future<bool> contains(String key) async {
     final prefs = await SharedPreferences.getInstance();
     return prefs.containsKey(key);

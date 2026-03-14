@@ -39,42 +39,32 @@ class ProfileUpdateContent extends StatelessWidget {
     );
   }
   Widget _imageUser(BuildContext context) {
-    return GestureDetector(
-      onTap: () {
-        GalleryOrPhotoDialog(
-          context, 
-          () => { context.read<ProfileUpdateBloc>().add(PickImage()) }, 
-          () => { context.read<ProfileUpdateBloc>().add(TakePhoto()) }
-        );
-        
-      },
-      child: Container(
-        width: 115,
-        margin: EdgeInsets.only(top: 50, bottom: 15),
-        child: AspectRatio(
-          aspectRatio: 1,
-          child: ClipOval(
-            child: state.image != null 
-            ? Image.file(
-              state.image!,
-              fit: BoxFit.cover,
-            )
-            : user != null 
-              ? user!.image != null 
-                ? FadeInImage.assetNetwork(
-                  placeholder: 'assets/img/user_image.png', 
-                  image: user!.image!,
-                  fit: BoxFit.cover,
-                  fadeInDuration: Duration(seconds: 1),
-                )
-                : 
-                Image.asset(
-                  'assets/img/user_image.png',
-                )
-              : Image.asset(
+    return Container(
+      width: 115,
+      margin: EdgeInsets.only(top: 50, bottom: 15),
+      child: AspectRatio(
+        aspectRatio: 1,
+        child: ClipOval(
+          child: state.image != null 
+          ? Image.file(
+            state.image!,
+            fit: BoxFit.cover,
+          )
+          : user != null 
+            ? user!.image != null 
+              ? FadeInImage.assetNetwork(
+                placeholder: 'assets/img/user_image.png', 
+                image: user!.image!,
+                fit: BoxFit.cover,
+                fadeInDuration: Duration(seconds: 1),
+              )
+              : 
+              Image.asset(
                 'assets/img/user_image.png',
-              ),
-          ),
+              )
+            : Image.asset(
+              'assets/img/user_image.png',
+            ),
         ),
       ),
     );
