@@ -28,6 +28,7 @@ class DriverCarInfoBloc extends Bloc<DriverCarInfoEvent, DriverCarInfoState> {
         )
       );
       AuthResponse authResponse = await authUseCases.getUserSession.run();
+      print('authResponse.user.id ${authResponse.user.id}');
       Resource response = await driverCarInfoUseCases.getDriverCarInfo.run(authResponse.user.id!);
       if (response is Success) {
         final driverCarInfo = response.data as DriverCarInfo;
@@ -90,9 +91,10 @@ class DriverCarInfoBloc extends Bloc<DriverCarInfoEvent, DriverCarInfoState> {
           formKey: formKey
         )
       );
+      AuthResponse authResponse = await authUseCases.getUserSession.run();
       Resource response = await driverCarInfoUseCases.createDriverCarInfo.run(
         DriverCarInfo(
-          idDriver: state.idDriver,
+          idDriver: authResponse.user.id,
           brand: state.brand.value, 
           plate: state.plate.value, 
           color: state.color.value

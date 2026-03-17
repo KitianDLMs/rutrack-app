@@ -41,9 +41,8 @@ class DriverTripRequest {
         distance: json["distance"] is String ? double.parse(json['distance']) : json['distance'],
         createdAt: DateTime.parse(json["created_at"]),
         updatedAt: DateTime.parse(json["updated_at"]),
-        driver: User.fromJson(json["driver"]),
-        car: DriverCarInfo.fromJson(json["car"]),
-    );
+        driver: json["driver"] != null ? User.fromJson(json["driver"]) : null,
+        car: json["car"] != null ? DriverCarInfo.fromJson(json["car"]) : null, );
 
     static List<DriverTripRequest> fromJsonList(List<dynamic> jsonList) {
       List<DriverTripRequest> toList = [];

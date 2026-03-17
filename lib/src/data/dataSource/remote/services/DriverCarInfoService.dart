@@ -9,9 +9,11 @@ class DriverCarInfoService {
 
   Future<Resource<bool>> create(DriverCarInfo driverCarInfo) async {
      try {
+      print(driverCarInfo.idDriver);
       Uri url = Uri.https(ApiConfig.API_PROJECT, '/driver-car-info');
       Map<String, String> headers = { 'Content-Type': 'application/json' };
       String body = json.encode(driverCarInfo);
+      print('bodyxxx $body');
       final response = await http.post(url, headers: headers, body: body);
       final data = json.decode(response.body);
       if (response.statusCode == 200 || response.statusCode == 201) {
@@ -32,6 +34,7 @@ class DriverCarInfoService {
       Uri url = Uri.https(ApiConfig.API_PROJECT, '/driver-car-info/$idDriver');
       Map<String, String> headers = { 'Content-Type': 'application/json' };
       final response = await http.get(url, headers: headers);
+      print('responsexxx $response');
       final data = json.decode(response.body);
       if (response.statusCode == 200 || response.statusCode == 201) {
         DriverCarInfo driverCarInfo = DriverCarInfo.fromJson(data);

@@ -25,7 +25,7 @@ class _DriverClientRequestsPageState extends State<DriverClientRequestsPage> {
     WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
       context.read<DriverClientRequestsBloc>().add(InitDriverClientRequest());
       context.read<DriverClientRequestsBloc>().add(ListenNewClientRequestSocketIO());
-      // context.read<DriverClientRequestsBloc>().add(GetNearbyTripRequest());
+      context.read<DriverClientRequestsBloc>().add(GetNearbyTripRequest());
     });
   }
 
@@ -47,16 +47,18 @@ class _DriverClientRequestsPageState extends State<DriverClientRequestsPage> {
           final response = state.response;
           if (response is Loading) {
             return Center(child: CircularProgressIndicator());
-          } 
-          else if (response is Success) {
-            List<ClientRequestResponse> clientRequests =
-                response.data as List<ClientRequestResponse>;
-            return ListView.builder(
+          }                
+          else if (response is Success<List<ClientRequestResponse>>) {
+              print('responseok** ${response.data}');
+              List<ClientRequestResponse> clientRequests = response.data;
+              print('clientRequests-> $clientRequests');
+              return ListView.builder(
                 itemCount: clientRequests.length,
                 itemBuilder: (context, index) {
                   return DriverClientRequestsItem(state, clientRequests[index]);
-                });
-          }
+                },
+              );
+            }
           return Container();
         }),
       ),

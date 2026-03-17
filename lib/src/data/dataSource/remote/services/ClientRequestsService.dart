@@ -1,5 +1,6 @@
 import 'dart:convert';
 
+import 'package:flutter/foundation.dart';
 import 'package:localdriver/src/data/api/ApiConfig.dart';
 import 'package:localdriver/src/domain/models/ClientRequest.dart';
 import 'package:localdriver/src/domain/models/ClientRequestResponse.dart';
@@ -133,7 +134,10 @@ class ClientRequestsService {
     double destinationLat, 
     double destinationLng
   ) async {
-
+    print('originLat $originLat');
+    print('originLng $originLng');
+    print('destinationLat $destinationLat');
+    print('destinationLng $destinationLng');
     try {
       Uri url = Uri.https(ApiConfig.API_PROJECT, '/client-requests/${originLat}/${originLng}/${destinationLat}/${destinationLng}');
       Map<String, String> headers = { 'Content-Type': 'application/json' };
@@ -154,8 +158,7 @@ class ClientRequestsService {
 
   }
 
-  Future<Resource<List<ClientRequestResponse>>> getNearbyTripRequest(double driverLat, double driverLng) async {
-
+  Future<Resource<List<ClientRequestResponse>>> getNearbyTripRequest(double driverLng, double driverLat) async {
     try {
       Uri url = Uri.https(ApiConfig.API_PROJECT, '/client-requests/${driverLat}/${driverLng}');
       Map<String, String> headers = { 'Content-Type': 'application/json' };
@@ -170,7 +173,6 @@ class ClientRequestsService {
       }
       
     } catch (e) {
-      print('Error: $e');
       return ErrorData(e.toString());
     }
 

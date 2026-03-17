@@ -14,6 +14,7 @@ class ClientDriverOffersItem extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    print('this.driverTripRequest ${this.driverTripRequest}');
     return Card(
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,

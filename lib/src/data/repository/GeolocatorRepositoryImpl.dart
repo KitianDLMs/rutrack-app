@@ -80,20 +80,27 @@ class GeolocatorRepositoryImpl implements GeolocatorRepository {
     }
   }
 
-  // @override
-  // Future<List<LatLng>> getPolyline(LatLng pickUpLatLng, LatLng destinationLatLng) async {
+  // Future<List<LatLng>> getPolyline(
+  //     LatLng pickUpLatLng,
+  //     LatLng destinationLatLng) async {
+
   //   PolylineResult result = await PolylinePoints().getRouteBetweenCoordinates(
-  //       API_KEY_GOOGLE,
-  //       PointLatLng(pickUpLatLng.latitude, pickUpLatLng.longitude),
-  //       PointLatLng(destinationLatLng.latitude, destinationLatLng.longitude),
-  //       travelMode: TravelMode.driving,
-  //       wayPoints: [PolylineWayPoint(location: "Bogota, Colombia")]);
+  //     googleApiKey: API_KEY_GOOGLE,
+  //     request: PolylineRequest(
+  //       origin: PointLatLng(pickUpLatLng.latitude, pickUpLatLng.longitude),
+  //       destination: PointLatLng(destinationLatLng.latitude, destinationLatLng.longitude),
+  //       mode: TravelMode.driving,
+  //     ),
+  //   );
+
   //   List<LatLng> polylineCoordinates = [];
+
   //   if (result.points.isNotEmpty) {
-  //     result.points.forEach((PointLatLng point) {
+  //     for (var point in result.points) {
   //       polylineCoordinates.add(LatLng(point.latitude, point.longitude));
-  //     });
+  //     }
   //   }
+
   //   return polylineCoordinates;
   // }
 

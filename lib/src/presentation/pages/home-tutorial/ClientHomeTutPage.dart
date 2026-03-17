@@ -282,10 +282,10 @@ class _ClientHomeTutPageState extends State<ClientHomeTutPage> {
                       final authResponse = await GoogleSignInService.signInWithGoogle();
                       if (authResponse != null) {
                         context.read<LoginBloc>().add(
-                          SaveUserSession(authResponse: authResponse),
+                          UpdateNotificationToken(id: authResponse.user.id!),
                         );
                         context.read<LoginBloc>().add(
-                          UpdateNotificationToken(id: authResponse.user.id!),
+                          SaveUserSession(authResponse: authResponse),
                         );
                         context.read<BlocSocketIO>().add(ConnectSocketIO());
                         context.read<BlocSocketIO>().add(ListenDriverAssignedSocketIO());
@@ -306,10 +306,10 @@ class _ClientHomeTutPageState extends State<ClientHomeTutPage> {
                     final authResponse = await AppleSignInService.signInWithApple();
                     if (authResponse != null) {
                       context.read<LoginBloc>().add(
-                        SaveUserSession(authResponse: authResponse),
+                        UpdateNotificationToken(id: authResponse.user.id!),
                       );
                       context.read<LoginBloc>().add(
-                        UpdateNotificationToken(id: authResponse.user.id!),
+                        SaveUserSession(authResponse: authResponse),
                       );
                       context.read<BlocSocketIO>().add(ConnectSocketIO());
                       context.read<BlocSocketIO>().add(ListenDriverAssignedSocketIO());
@@ -452,10 +452,10 @@ class _ClientHomeTutPageState extends State<ClientHomeTutPage> {
                       final authResponse = await GoogleSignInService.signInWithGoogle();
                       if (authResponse != null) {
                         context.read<LoginBloc>().add(
-                          SaveUserSession(authResponse: authResponse),
+                          UpdateNotificationToken(id: authResponse.user.id!),
                         );
                         context.read<LoginBloc>().add(
-                          UpdateNotificationToken(id: authResponse.user.id!),
+                          SaveUserSession(authResponse: authResponse),
                         );
                         context.read<BlocSocketIO>().add(ConnectSocketIO());
                         context.read<BlocSocketIO>().add(ListenDriverAssignedSocketIO());
@@ -473,17 +473,16 @@ class _ClientHomeTutPageState extends State<ClientHomeTutPage> {
                 SignInWithAppleButton(
                   text: 'Iniciar con Apple',
                   onPressed: () async {
-
                     final authResponse = await AppleSignInService.signInWithApple();
                     print('authresponse $authResponse');
                     if (authResponse != null) {
 
                       context.read<LoginBloc>().add(
-                        SaveUserSession(authResponse: authResponse),
+                        UpdateNotificationToken(id: authResponse.user.id!),
                       );
 
                       context.read<LoginBloc>().add(
-                        UpdateNotificationToken(id: authResponse.user.id!),
+                        SaveUserSession(authResponse: authResponse),
                       );
 
                       context.read<BlocSocketIO>().add(ConnectSocketIO());

@@ -17,6 +17,13 @@ class ClientDriverOffersBloc extends Bloc<ClientDriverOffersEvent, ClientDriverO
   ClientDriverOffersBloc(this.blocSocketIO, this.driverTripRequestUseCases, this.clientRequestsUseCases): super(ClientDriverOffersState()) {
     on<GetDriverOffers>((event, emit) async {
       Resource<List<DriverTripRequest>> response = await driverTripRequestUseCases.getDriverTripOffersByClientRequest.run(event.idClientRequest);
+      if (response is Success<List<DriverTripRequest>>) {
+        print('✅ Success! Data: ${response.data}');
+      } else if (response is ErrorData<List<DriverTripRequest>>) {
+        print('❌ Error: ${response.message}');
+      } else if (response is Loading) {
+        print('⏳ Loading...');
+      }
       emit(
         state.copyWith(
           responseDriverOffers: response

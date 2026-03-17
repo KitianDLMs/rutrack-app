@@ -217,7 +217,7 @@ class ClientMapTripContent extends StatelessWidget {
             if (!state.controller!.isCompleted) {
               state.controller?.complete(controller); 
               if (clientRequest != null) {
-                context.read<ClientMapTripBloc>().add(AddMarkerPickup(lat: clientRequest!.pickupPosition.y, lng: clientRequest!.pickupPosition.x));
+                context.read<ClientMapTripBloc>().add(AddMarkerPickup(lat: clientRequest!.pickupPosition.lat, lng: clientRequest!.pickupPosition.lng));
               }  
             }
           }

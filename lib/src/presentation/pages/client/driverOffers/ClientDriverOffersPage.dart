@@ -27,6 +27,7 @@ class _ClientDriverOffersPageState extends State<ClientDriverOffersPage> {
   @override
   void initState() {
     super.initState();
+    idClientRequest = widget.idClientRequest;
     WidgetsBinding.instance.addPostFrameCallback((_) {
       context.read<ClientDriverOffersBloc>().add(
         ListenNewDriverOfferSocketIO(idClientRequest: idClientRequest!),
@@ -39,8 +40,11 @@ class _ClientDriverOffersPageState extends State<ClientDriverOffersPage> {
     return Scaffold(
       body: BlocListener<ClientDriverOffersBloc, ClientDriverOffersState>(
         listener: (context, state) {
+
+          print('responsestate $state');
           final response = state.responseDriverOffers;
           final responseAssignDriver = state.responseAssignDriver;
+          print('responseAssignDriver $responseAssignDriver');
           if (response is ErrorData) {
             Fluttertoast.showToast(
                 msg: response.message, toastLength: Toast.LENGTH_LONG);
@@ -55,27 +59,33 @@ class _ClientDriverOffersPageState extends State<ClientDriverOffersPage> {
           final response = state.responseDriverOffers;
 
           if (response is Loading) {
+            print('driverTripRequest $response');
             return Center(child: CircularProgressIndicator());
-          } else if (response is Success) {
+          } else if (response is Success<List<DriverTripRequest>>) {
+              final driverTripRequestList = response.data;
+              print('driverTripRequestList $driverTripRequestList');
             List<DriverTripRequest> driverTripRequest =
                 response.data as List<DriverTripRequest>;
+            print('driverTripRequest2 $driverTripRequest');
+            if (driverTripRequest.isEmpty) {
+              return Center(
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Text("Esperando conductores..."),
+                    SizedBox(height: 20),
+                    CircularProgressIndicator(color: Colors.grey),
+                  ],
+                ),
+              );
+            }
+
             return ListView.builder(
-                itemCount: driverTripRequest.length,
-                itemBuilder: (context, index) {
-                  if (driverTripRequest.isEmpty) {
-                    return Center(
-                      child: Column(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          Text("Esperando conductores..."),
-                          SizedBox(height: 20),
-                          CircularProgressIndicator(color: Colors.grey,)
-                        ],
-                      ),
-                    );
-                  }
-                  return ClientDriverOffersItem(driverTripRequest[index]);
-                });
+              itemCount: driverTripRequest.length,
+              itemBuilder: (context, index) {
+                return ClientDriverOffersItem(driverTripRequest[index]);
+              },
+            );
           }
           return Center(
             child: Column(

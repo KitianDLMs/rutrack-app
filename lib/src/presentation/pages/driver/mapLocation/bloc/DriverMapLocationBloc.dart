@@ -59,7 +59,7 @@ class DriverMapLocationBloc extends Bloc<DriverMapLocationEvent, DriverMapLocati
     });
 
     on<AddMyPositionMarker>((event, emit) async {
-      BitmapDescriptor descriptor = BitmapDescriptor.defaultMarker;
+      BitmapDescriptor descriptor = await geolocatorUseCases.createMarker.run('assets/img/car_pin.png');
       Marker marker = geolocatorUseCases.getMarker.run(        
         'my_location',
         event.lat,

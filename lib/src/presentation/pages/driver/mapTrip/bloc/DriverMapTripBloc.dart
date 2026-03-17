@@ -81,7 +81,7 @@ class DriverMapTripBloc extends Bloc<DriverMapTripEvent, DriverMapTripState> {
           )
         );
         add(FindPosition());
-        add(AddMarkerPickup(lat: data.pickupPosition.y, lng: data.pickupPosition.x));
+        add(AddMarkerPickup(lat: data.pickupPosition.lat, lng: data.pickupPosition.lng));
       }
     });
 
@@ -143,8 +143,8 @@ class DriverMapTripBloc extends Bloc<DriverMapTripEvent, DriverMapTripState> {
           idPolyline: "pickup_polyline",
           originLat: state.position!.latitude,
           originLng: state.position!.longitude,
-          destinationLat: state.clientRequestResponse!.pickupPosition.y,
-          destinationLng: state.clientRequestResponse!.pickupPosition.x,
+          destinationLat: state.clientRequestResponse!.pickupPosition.lat,
+          destinationLng: state.clientRequestResponse!.pickupPosition.lng,
         )
       );
     });
@@ -216,14 +216,14 @@ class DriverMapTripBloc extends Bloc<DriverMapTripEvent, DriverMapTripState> {
             idPolyline: "destination_polyline",
             originLat: state.position!.latitude,
             originLng: state.position!.longitude,
-            destinationLat: state.clientRequestResponse!.destinationPosition.y,
-            destinationLng: state.clientRequestResponse!.destinationPosition.x,
+            destinationLat: state.clientRequestResponse!.destinationPosition.lat,
+            destinationLng: state.clientRequestResponse!.destinationPosition.lng,
           )
         );
         add(
           AddMarkerDestination(
-            lat: state.clientRequestResponse!.destinationPosition.y, 
-            lng: state.clientRequestResponse!.destinationPosition.x
+            lat: state.clientRequestResponse!.destinationPosition.lat, 
+            lng: state.clientRequestResponse!.destinationPosition.lng
           )
         );
         add(RemoveMarker(idMarker: 'pickup'));

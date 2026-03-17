@@ -33,7 +33,7 @@ class DriverCarInfoState extends Equatable {
     Resource? response
   }) {
     return DriverCarInfoState(
-      idDriver: idDriver ?? this.idDriver,
+      idDriver: idDriver,
       brand: brand ?? this.brand,
       plate: plate ?? this.plate,
       color: color ?? this.color,

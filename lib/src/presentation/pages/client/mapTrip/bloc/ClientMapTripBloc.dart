@@ -145,8 +145,8 @@ class ClientMapTripBloc extends Bloc<ClientMapTripEvent, ClientMapTripState> {
       Resource response = await clientRequestsUseCases.getTimeAndDistance.run(
         event.driverLat,
         event.driverLng,
-        state.clientRequestResponse!.pickupPosition.y,
-        state.clientRequestResponse!.pickupPosition.x,
+        state.clientRequestResponse!.pickupPosition.lat,
+        state.clientRequestResponse!.pickupPosition.lng,
       );
       if (response is Success) {
         final data = response.data as TD.TimeAndDistanceValues; 
@@ -174,8 +174,8 @@ class ClientMapTripBloc extends Bloc<ClientMapTripEvent, ClientMapTripState> {
           AddPolyline(
             driverLat: state.driverLatLng!.latitude, 
             driverLng: state.driverLatLng!.longitude,
-            destinationLat: state.clientRequestResponse!.pickupPosition.y,
-            destinationLng: state.clientRequestResponse!.pickupPosition.x,
+            destinationLat: state.clientRequestResponse!.pickupPosition.lat,
+            destinationLng: state.clientRequestResponse!.pickupPosition.lng,
           )
         );
         add(
@@ -216,15 +216,15 @@ class ClientMapTripBloc extends Bloc<ClientMapTripEvent, ClientMapTripState> {
             AddPolyline(
               driverLat: state.driverLatLng!.latitude, 
               driverLng: state.driverLatLng!.longitude, 
-              destinationLat: state.clientRequestResponse!.destinationPosition.y, 
-              destinationLng: state.clientRequestResponse!.destinationPosition.x
+              destinationLat: state.clientRequestResponse!.destinationPosition.lat, 
+              destinationLng: state.clientRequestResponse!.destinationPosition.lng
             )
           );
           add(RemoveMarker(idMarker: 'pickup'));
           add(
             AddMarkerDestination(
-              lat: state.clientRequestResponse!.destinationPosition.y, 
-              lng: state.clientRequestResponse!.destinationPosition.x
+              lat: state.clientRequestResponse!.destinationPosition.lat, 
+              lng: state.clientRequestResponse!.destinationPosition.lng
             )
           );
         }

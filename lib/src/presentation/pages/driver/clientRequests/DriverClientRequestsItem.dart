@@ -19,6 +19,12 @@ class DriverClientRequestsItem extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    print('CLIENT REQUEST: ${clientRequest?.toJson()}');
+    print('CLIENT NAME: ${clientRequest?.client.name}');
+    print('CLIENT LASTNAME: ${clientRequest?.client.lastname}');
+    print('CLIENT IMAGE: ${clientRequest?.client.image}');
+    print('GOOGLE DISTANCE MATRIX: ${clientRequest?.googleDistanceMatrix?.toJson()}');
+    print('FARE OFFERED: ${clientRequest?.fareOffered}');
     return GestureDetector(
       onTap: () {
         FareOfferedDialog(
@@ -30,7 +36,7 @@ class DriverClientRequestsItem extends StatelessWidget {
                   driverTripRequest: DriverTripRequest(
                     idDriver: state.idDriver!, 
                     idClientRequest: clientRequest!.id, 
-                    fareOffered: double.parse(context.read<DriverClientRequestsBloc>().state.fareOffered.value), 
+                    fareOffered: double.parse(context.read<DriverClientRequestsBloc>().state.fareOffered.value),                                       
                     time: clientRequest!.googleDistanceMatrix!.duration.value.toDouble() / 60, 
                     distance: clientRequest!.googleDistanceMatrix!.distance.value.toDouble() / 1000, 
                   )
@@ -95,13 +101,13 @@ class DriverClientRequestsItem extends StatelessWidget {
           child: Text(
             'Tiempo de llegada: ',
             style: TextStyle(
-              color: Colors.black,
+              color: const Color.fromARGB(255, 112, 106, 106),
               fontWeight: FontWeight.bold
             ),
           ),
         ),
-        Flexible(
-          child: Text(clientRequest?.googleDistanceMatrix?.duration.text ?? '')
+        Flexible(          
+          child: Text(clientRequest?.googleDistanceMatrix?.duration?.text ?? '')          
         ),
       ],
     );
@@ -121,7 +127,7 @@ class DriverClientRequestsItem extends StatelessWidget {
           ),
         ),
         Flexible(
-          child: Text(clientRequest?.googleDistanceMatrix?.distance.text ?? '')
+          child: Text(clientRequest?.googleDistanceMatrix?.distance!.text ?? '')
         ),
       ],
     );
@@ -178,7 +184,7 @@ class DriverClientRequestsItem extends StatelessWidget {
             ? clientRequest!.client.image != null 
               ? FadeInImage.assetNetwork(
                 placeholder: 'assets/img/user_image.png', 
-                image: clientRequest?.client.image,
+                image: clientRequest?.client.image ?? '',
                 fit: BoxFit.cover,
                 fadeInDuration: Duration(seconds: 1),
               )
