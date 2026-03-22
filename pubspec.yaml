@@ -86,7 +86,7 @@ flutter:
   assets:
     - assets/img/
     - assets/img/person_location.png
-
+    - assets/lottie/waiting_car.json    
   # To add assets to your application, add an assets section, like this:
   # assets:
   #   - images/a_dot_burr.jpeg

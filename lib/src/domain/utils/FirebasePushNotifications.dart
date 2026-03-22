@@ -22,7 +22,6 @@ Future<void> firebaseMessagingBackgroundHandler(RemoteMessage message) async {
   print('INFORMACION NOTIFICACION BACKGROUND: ${message.data}');
 }
 
-
 Future<void> setupFlutterNotifications() async {
   if (isFlutterLocalNotificationsInitialized) {
     return;

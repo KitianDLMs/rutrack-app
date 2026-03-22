@@ -55,7 +55,7 @@ class _ClientHomePageState extends State<ClientHomePage> {
         surfaceTintColor: Colors.transparent,
         shadowColor: Colors.transparent,
         title: Text(
-          'LOCAL DRIVER',
+          'Flete',
           style: TextStyle(
               color:
                   Colors.white),

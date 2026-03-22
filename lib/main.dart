@@ -64,7 +64,7 @@ class _MyAppState extends State<MyApp> {
       providers: blocProviders,
       child: MaterialApp(
         builder: FToastBuilder(),
-        title: 'Rutrack',
+        title: 'Flete',
         navigatorKey: navigatorKey,
         debugShowCheckedModeBanner: false,
         theme: ThemeData(
@@ -81,24 +81,23 @@ class _MyAppState extends State<MyApp> {
           'driver/home': (BuildContext context) => DriverHomePage(),
           'client/map/booking': (BuildContext context) => ClientMapBookingInfoPage(),
           'profile/update': (BuildContext context) => ProfileUpdatePage(),
-          // 'client/driver/offers': (BuildContext context) => ClientDriverOffersPage(),
           'client/map/trip': (BuildContext context) => ClientMapTripPage(),
           'driver/map/trip': (BuildContext context) => DriverMapTripPage(),
           'driver/rating/trip': (BuildContext context) => DriverRatingTripPage(),
           'driver/client/request': (BuildContext context) => DriverClientRequestsPage(),
           'client/rating/trip': (BuildContext context) => ClientRatingTripPage(),
         },
-          onGenerateRoute: (settings) {
-            if (settings.name == 'client/driver/offers') {
-              final idClientRequest = settings.arguments as int;
-              return MaterialPageRoute(
-                builder: (_) => ClientDriverOffersPage(
-                  idClientRequest: idClientRequest,
-                ),
-              );
-            }
-            return null;
-          },
+        onGenerateRoute: (settings) {
+          if (settings.name == 'client/driver/offers') {
+            final idClientRequest = settings.arguments as int;
+            return MaterialPageRoute(
+              builder: (_) => ClientDriverOffersPage(
+                idClientRequest: idClientRequest,
+              ),
+            );
+          }
+          return null;
+        },
       ),    
     );
   }

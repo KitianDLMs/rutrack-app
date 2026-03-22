@@ -97,13 +97,12 @@ class _ClientDriverOffersPageState extends State<ClientDriverOffersPage> {
                   style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
                 ),
                 SizedBox(height: 20),
-                CircularProgressIndicator()
-                // Lottie.asset(
-                //   'assets/lottie/waiting_car.json',
-                //   width: 400,
-                //   height: 230,
-                //   // fit: BoxFit.fill,
-                // )
+                Lottie.asset(
+                  'assets/lottie/waiting_car.json',                   
+                  width: 300,
+                  height: 300,
+                  fit: BoxFit.fill,
+                )
               ],
             ),
           );

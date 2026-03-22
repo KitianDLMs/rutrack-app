@@ -15,8 +15,7 @@ class BlocSocketIO extends Bloc<BlocSocketIOEvent, BlocSocketIOState> {
 
   BlocSocketIO(this.socketUseCases, this.authUseCases): super(BlocSocketIOState()) {
 
-    on<ConnectSocketIO>((event, emit) {
-      print('connect to socket');
+    on<ConnectSocketIO>((event, emit) {       
       Socket socket = socketUseCases.connect.run();
       emit(
         state.copyWith(socket: socket)
@@ -34,7 +33,6 @@ class BlocSocketIO extends Bloc<BlocSocketIOEvent, BlocSocketIOState> {
       if (state.socket != null) {
         AuthResponse authResponse = await authUseCases.getUserSession.run();
         state.socket?.on('driver_assigned/${authResponse.user.id}', (data) {
-          print('DATA: $data');
           navigatorKey.currentState?.pushNamed('driver/map/trip', arguments: data['id_client_request']);
         });
       }

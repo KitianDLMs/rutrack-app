@@ -2,8 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:localdriver/blocSocketIO/BlocSocketIO.dart';
 import 'package:localdriver/blocSocketIO/BlocSocketIOEvent.dart';
-import 'package:localdriver/main.dart';
-import 'package:localdriver/src/presentation/pages/client/mapSeeker/ClientMapSeekerPage.dart';
 import 'package:localdriver/src/presentation/pages/driver/carInfo/DriverCarInfoPage.dart';
 import 'package:localdriver/src/presentation/pages/driver/clientRequests/DriverClientRequestsPage.dart';
 import 'package:localdriver/src/presentation/pages/driver/historyTrip/DriverHistoryTripPage.dart';
@@ -75,7 +73,7 @@ class _DriverHomePageState extends State<DriverHomePage> {
                     ),
                   ),
                   child: Text(
-                    'Menu del Conductor',
+                    'Menúu del Conductor',
                     style: TextStyle(color: Colors.white),
                   )
                 ),
