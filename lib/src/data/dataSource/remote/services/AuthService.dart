@@ -58,8 +58,7 @@ class AuthService {
     try {      
       Uri url = Uri.https(ApiConfig.API_PROJECT, '/auth/delete-account');
       Map<String, String> headers = {
-        'Content-Type': 'application/json',
-        // 'Authorization': 'Bearer $sessionToken', // Token de autenticación
+        'Content-Type': 'application/json'
       };
 
       final response = await http.delete(url, headers: headers);

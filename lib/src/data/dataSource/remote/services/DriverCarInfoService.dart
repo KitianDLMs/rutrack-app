@@ -12,8 +12,7 @@ class DriverCarInfoService {
       print(driverCarInfo.idDriver);
       Uri url = Uri.https(ApiConfig.API_PROJECT, '/driver-car-info');
       Map<String, String> headers = { 'Content-Type': 'application/json' };
-      String body = json.encode(driverCarInfo);
-      print('bodyxxx $body');
+      String body = json.encode(driverCarInfo);      
       final response = await http.post(url, headers: headers, body: body);
       final data = json.decode(response.body);
       if (response.statusCode == 200 || response.statusCode == 201) {

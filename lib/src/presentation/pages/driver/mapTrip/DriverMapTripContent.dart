@@ -10,12 +10,12 @@ import 'package:localdriver/src/presentation/pages/driver/mapTrip/bloc/DriverMap
 import 'package:localdriver/src/presentation/widgets/DefaultImageUrl.dart';
 
 class DriverMapTripContent extends StatelessWidget {
-  
   DriverMapTripState state;
   ClientRequestResponse? clientRequest;
   TimeAndDistanceValues? timeAndDistanceValues;
 
-  DriverMapTripContent(this.state, this.clientRequest, this.timeAndDistanceValues);
+  DriverMapTripContent(
+      this.state, this.clientRequest, this.timeAndDistanceValues);
 
   @override
   Widget build(BuildContext context) {
@@ -23,138 +23,257 @@ class DriverMapTripContent extends StatelessWidget {
       children: [
         _googleMaps(context),
         Align(
-          alignment: Alignment.bottomCenter,
-          child: _cardBookingInfo(context)
-        ),
+            alignment: Alignment.bottomCenter,
+            child: _cardBookingInfo(context)),
       ],
     );
   }
 
   Widget _cardBookingInfo(BuildContext context) {
     return Container(
-      height: MediaQuery.of(context).size.height * 0.47,
-      padding: EdgeInsets.only(left: 20, right: 20),
+      height: MediaQuery.of(context).size.height * 0.50,
+      padding: EdgeInsets.symmetric(horizontal: 15),
       decoration: BoxDecoration(
         gradient: LinearGradient(
           begin: Alignment.topRight,
           end: Alignment.bottomLeft,
           colors: [
-            Color.fromARGB(255, 255, 255, 255),
-            Color.fromARGB(255, 186, 186, 186),
-          ]
+            Colors.white,
+            Color.fromARGB(255, 220, 220, 220),
+          ],
         ),
         borderRadius: BorderRadius.only(
-          topLeft: Radius.circular(30),
-          topRight: Radius.circular(30),
-        )
+          topLeft: Radius.circular(25),
+          topRight: Radius.circular(25),
+        ),
       ),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          SizedBox(height: 15),
+      child: SingleChildScrollView(
+        child: Column(
+          children: [
+            SizedBox(height: 10),
+
+            // 🔥 CLIENTE
             Text(
-              'TU CLIENTE',
+              'CLIENTE',
               style: TextStyle(
-                fontSize: 17, 
+                fontSize: 14,
+                color: Colors.grey,
                 fontWeight: FontWeight.bold,
-                fontStyle: FontStyle.italic,
-                color: Colors.blueAccent
               ),
             ),
-           ListTile(
-            title: Text(
-              '${clientRequest?.client?.name} ${clientRequest?.client?.lastname}',
-              style: TextStyle(
-                fontSize: 15
-              ),
-            ),
-            subtitle: Text(
-              'Tel: ${clientRequest?.client?.phone}',
-              style: TextStyle(
-                fontSize: 13
-              ),
-            ),
-            trailing: DefaultImageUrl(
-              url: clientRequest?.client?.image,
-              width: 60,
-            ),
-          ),
-          SizedBox(height: 10),
-          Text(
-            'DATOS DEL VIAJE',
-            style: TextStyle(
-              fontSize: 17, 
-              fontWeight: FontWeight.bold,
-              fontStyle: FontStyle.italic,
-              color: Colors.blueAccent
-            ),
-          ),
-          ListTile(
-            title: Text(
-              'Ubicaciones',
-              style: TextStyle(
-                fontSize: 15
-              ),
-            ),
-            subtitle: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
+
+            Row(
               children: [
-                Text(
-                  'Desde: ${clientRequest?.pickupDescription}',
-                  style: TextStyle(
-                    fontSize: 13
-                  ),
+                _infoItem(
+                  "Nombre",
+                  "${clientRequest?.client?.name ?? ''}",
+                  Icons.person,
                 ),
-                Text(
-                  'Hasta: ${clientRequest?.destinationDescription}',
-                  style: TextStyle(
-                    fontSize: 13
-                  ),
+                _infoItem(
+                  "Teléfono",
+                  "${clientRequest?.client?.phone ?? ''}",
+                  Icons.phone,
                 ),
               ],
             ),
-            leading: Icon(Icons.location_on),
-          ),
-        
-          ListTile(
-            title: Text(
-              'Valor del viaje',
+
+            // 🔥 VIAJE
+            SizedBox(height: 5),
+
+            Text(
+              'VIAJE',
               style: TextStyle(
-                fontSize: 15
+                fontSize: 14,
+                color: Colors.grey,
+                fontWeight: FontWeight.bold,
               ),
             ),
-            subtitle: Text(
-              '\$${clientRequest?.fareAssigned}',
-              style: TextStyle(
-                fontSize: 17,
+
+            Row(
+              children: [
+                _infoItem(
+                  "Desde",
+                  clientRequest?.pickupDescription ?? '',
+                  Icons.location_on,
+                ),
+                _infoItem(
+                  "Hasta",
+                  clientRequest?.destinationDescription ?? '',
+                  Icons.flag,
+                ),
+              ],
+            ),
+
+            // 🔥 TIEMPO + DISTANCIA
+            Row(
+              children: [
+                _infoItem(
+                  "Tiempo",
+                  timeAndDistanceValues?.duration?.text ?? '',
+                  Icons.access_time,
+                ),
+                _infoItem(
+                  "Distancia",
+                  timeAndDistanceValues?.distance?.text ?? '',
+                  Icons.route,
+                ),
+              ],
+            ),
+
+            // 🔥 CARGA
+            Row(
+              children: [
+                _infoItem(
+                  "Carga",
+                  "${clientRequest?.requiredWeight ?? '-'} ${clientRequest?.weightUnit ?? ''}",
+                  Icons.scale,
+                ),
+                _infoItem(
+                  "Camión",
+                  clientRequest?.truckType ?? '-',
+                  Icons.local_shipping,
+                ),
+              ],
+            ),
+
+            // 🔥 EXTRAS
+            Row(
+              children: [
+                _infoItem(
+                  "Ayudantes",
+                  clientRequest?.requireHelpers == true ? 'Sí' : 'No',
+                  Icons.people,
+                ),
+                _infoItem(
+                  "Grúa",
+                  clientRequest?.requireCrane == true ? 'Sí' : 'No',
+                  Icons.construction,
+                ),
+              ],
+            ),
+
+            // 🔥 PRECIO DESTACADO
+            Container(
+              width: double.infinity,
+              margin: EdgeInsets.all(6),
+              padding: EdgeInsets.all(14),
+              decoration: BoxDecoration(
                 color: Colors.blueAccent,
-                fontWeight: FontWeight.bold
+                borderRadius: BorderRadius.circular(15),
+              ),
+              child: Text(
+                "\$${clientRequest?.fareAssigned}",
+                textAlign: TextAlign.center,
+                style: TextStyle(
+                  color: Colors.white,
+                  fontSize: 22, // 🔥 más grande
+                  fontWeight: FontWeight.bold,
+                ),
               ),
             ),
-            leading: Icon(Icons.money),
-          ),
-          state.statusTrip == StatusTrip.ARRIVED 
-          ?
-          _actionUpdateStatus(
-            'FINALIZAR VIAJE',
-            Icons.power_settings_new,
-            () {
-              context.read<DriverMapTripBloc>().add(UpdateStatusToFinished());
-            }
-          )
-          : _actionUpdateStatus(
-            'NOTIFICAR LLEGADA',
-            Icons.check,
-            () {
-              context.read<DriverMapTripBloc>().add(UpdateStatusToArrived());
-            }
-          )
-        ],
-      )
+
+            // 🔥 BOTÓN ACCIÓN (MUY IMPORTANTE)
+            state.statusTrip == StatusTrip.ARRIVED
+                ? _actionButton(
+                    'FINALIZAR VIAJE',
+                    Icons.power_settings_new,
+                    Colors.red,
+                    () {
+                      context.read<DriverMapTripBloc>().add(
+                            UpdateStatusToFinished(),
+                          );
+                    },
+                  )
+                : _actionButton(
+                    'NOTIFICAR LLEGADA',
+                    Icons.check_circle,
+                    Colors.green,
+                    () {
+                      context.read<DriverMapTripBloc>().add(
+                            UpdateStatusToArrived(),
+                          );
+                    },
+                  ),
+
+            SizedBox(height: 15),
+          ],
+        ),
+      ),
     );
   }
 
-  Widget _actionUpdateStatus(String option, IconData icon, Function() function) {
+  Widget _infoItem(String title, String value, IconData icon) {
+    return Expanded(
+      child: Container(
+        margin: EdgeInsets.all(4),
+        padding: EdgeInsets.all(10),
+        decoration: BoxDecoration(
+          color: Colors.white,
+          borderRadius: BorderRadius.circular(12),
+          boxShadow: [BoxShadow(color: Colors.black12, blurRadius: 4)],
+        ),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Icon(icon, size: 18, color: Colors.blueAccent),
+            SizedBox(height: 4),
+            Text(
+              title,
+              style: TextStyle(fontSize: 11, color: Colors.grey),
+            ),
+            SizedBox(height: 3),
+            Text(
+              value,
+              maxLines: 2,
+              overflow: TextOverflow.ellipsis,
+              style: TextStyle(
+                fontWeight: FontWeight.bold,
+                fontSize: 13, // 🔥 más legible
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+
+  Widget _actionButton(
+    String text,
+    IconData icon,
+    Color color,
+    Function() onPressed,
+  ) {
+    return GestureDetector(
+      onTap: onPressed,
+      child: Container(
+        width: double.infinity,
+        margin: EdgeInsets.symmetric(horizontal: 5, vertical: 8),
+        padding: EdgeInsets.symmetric(vertical: 14),
+        decoration: BoxDecoration(
+          color: color,
+          borderRadius: BorderRadius.circular(15),
+        ),
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Icon(icon, color: Colors.white),
+            SizedBox(width: 10),
+            Text(
+              text,
+              style: TextStyle(
+                color: Colors.white,
+                fontWeight: FontWeight.bold,
+                fontSize: 16,
+              ),
+            )
+          ],
+        ),
+      ),
+    );
+  }
+
+  Widget _actionUpdateStatus(
+      String option, IconData icon, Function() function) {
     return GestureDetector(
       onTap: () {
         function();
@@ -165,23 +284,19 @@ class DriverMapTripContent extends StatelessWidget {
           contentPadding: EdgeInsets.zero,
           title: Text(
             option,
-            style: TextStyle(
-              fontWeight: FontWeight.bold
-            ),
+            style: TextStyle(fontWeight: FontWeight.bold),
           ),
           leading: Container(
             padding: EdgeInsets.all(10),
             decoration: BoxDecoration(
-              gradient: LinearGradient(
-                begin: Alignment.topRight,
-                end: Alignment.bottomLeft,
-                colors: [
-                  Color.fromARGB(255, 19, 58, 213),
-                  Color.fromARGB(255, 65, 173, 255),
-                ]
-              ),
-              borderRadius: BorderRadius.all(Radius.circular(50))
-            ),
+                gradient: LinearGradient(
+                    begin: Alignment.topRight,
+                    end: Alignment.bottomLeft,
+                    colors: [
+                      Color.fromARGB(255, 19, 58, 213),
+                      Color.fromARGB(255, 65, 173, 255),
+                    ]),
+                borderRadius: BorderRadius.all(Radius.circular(50))),
             child: Icon(
               icon,
               color: Colors.white,
@@ -201,10 +316,11 @@ class DriverMapTripContent extends StatelessWidget {
         markers: Set<Marker>.of(state.markers.values),
         polylines: Set<Polyline>.of(state.polylines.values),
         onMapCreated: (GoogleMapController controller) {
-          controller.setMapStyle('[ { "featureType": "all", "elementType": "labels.text.fill", "stylers": [ { "color": "#ffffff" } ] }, { "featureType": "all", "elementType": "labels.text.stroke", "stylers": [ { "color": "#000000" }, { "lightness": 13 } ] }, { "featureType": "administrative", "elementType": "geometry.fill", "stylers": [ { "color": "#000000" } ] }, { "featureType": "administrative", "elementType": "geometry.stroke", "stylers": [ { "color": "#144b53" }, { "lightness": 14 }, { "weight": 1.4 } ] }, { "featureType": "landscape", "elementType": "all", "stylers": [ { "color": "#08304b" } ] }, { "featureType": "poi", "elementType": "geometry", "stylers": [ { "color": "#0c4152" }, { "lightness": 5 } ] }, { "featureType": "road.highway", "elementType": "geometry.fill", "stylers": [ { "color": "#000000" } ] }, { "featureType": "road.highway", "elementType": "geometry.stroke", "stylers": [ { "color": "#0b434f" }, { "lightness": 25 } ] }, { "featureType": "road.arterial", "elementType": "geometry.fill", "stylers": [ { "color": "#000000" } ] }, { "featureType": "road.arterial", "elementType": "geometry.stroke", "stylers": [ { "color": "#0b3d51" }, { "lightness": 16 } ] }, { "featureType": "road.local", "elementType": "geometry", "stylers": [ { "color": "#000000" } ] }, { "featureType": "transit", "elementType": "all", "stylers": [ { "color": "#146474" } ] }, { "featureType": "water", "elementType": "all", "stylers": [ { "color": "#021019" } ] } ]');
+          controller.setMapStyle(
+              '[ { "featureType": "all", "elementType": "labels.text.fill", "stylers": [ { "color": "#ffffff" } ] }, { "featureType": "all", "elementType": "labels.text.stroke", "stylers": [ { "color": "#000000" }, { "lightness": 13 } ] }, { "featureType": "administrative", "elementType": "geometry.fill", "stylers": [ { "color": "#000000" } ] }, { "featureType": "administrative", "elementType": "geometry.stroke", "stylers": [ { "color": "#144b53" }, { "lightness": 14 }, { "weight": 1.4 } ] }, { "featureType": "landscape", "elementType": "all", "stylers": [ { "color": "#08304b" } ] }, { "featureType": "poi", "elementType": "geometry", "stylers": [ { "color": "#0c4152" }, { "lightness": 5 } ] }, { "featureType": "road.highway", "elementType": "geometry.fill", "stylers": [ { "color": "#000000" } ] }, { "featureType": "road.highway", "elementType": "geometry.stroke", "stylers": [ { "color": "#0b434f" }, { "lightness": 25 } ] }, { "featureType": "road.arterial", "elementType": "geometry.fill", "stylers": [ { "color": "#000000" } ] }, { "featureType": "road.arterial", "elementType": "geometry.stroke", "stylers": [ { "color": "#0b3d51" }, { "lightness": 16 } ] }, { "featureType": "road.local", "elementType": "geometry", "stylers": [ { "color": "#000000" } ] }, { "featureType": "transit", "elementType": "all", "stylers": [ { "color": "#146474" } ] }, { "featureType": "water", "elementType": "all", "stylers": [ { "color": "#021019" } ] } ]');
           if (state.controller != null) {
             if (!state.controller!.isCompleted) {
-              state.controller?.complete(controller); 
+              state.controller?.complete(controller);
             }
           }
         },

@@ -54,15 +54,12 @@ class LoginContent extends StatelessWidget {
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.center,
                     children: [
-                      // Logo o ícono
                       Image.asset(
                         'assets/img/car_white.png',
                         width: 100,
                         height: 100,
                       ),
                       const SizedBox(height: 24),
-
-                      // Texto de bienvenida
                       const Text(
                         "Bienvenido de nuevo",
                         style: TextStyle(
@@ -80,8 +77,6 @@ class LoginContent extends StatelessWidget {
                         ),
                       ),
                       const SizedBox(height: 40),
-
-                      // Campo Email
                       DefaultTextField(
                         onChanged: (text) {
                           context.read<LoginBloc>().add(
@@ -92,8 +87,6 @@ class LoginContent extends StatelessWidget {
                         icon: Icons.email_outlined,
                       ),
                       const SizedBox(height: 16),
-
-                      // Campo Password
                       DefaultTextField(
                         onChanged: (text) {
                           context.read<LoginBloc>().add(PasswordChanged(
@@ -104,10 +97,7 @@ class LoginContent extends StatelessWidget {
                         text: 'Contraseña',
                         icon: Icons.lock_outline,
                       ),
-
                       const SizedBox(height: 30),
-
-                      // Botón principal
                       DefaultButton(
                         text: 'Iniciar sesión',
                         onPressed: () {
@@ -118,10 +108,7 @@ class LoginContent extends StatelessWidget {
                           }
                         },
                       ),
-
                       const SizedBox(height: 20),
-
-                      // Separador
                       Row(
                         children: [
                           Expanded(child: Divider(color: Colors.white24)),
@@ -136,10 +123,7 @@ class LoginContent extends StatelessWidget {
                           Expanded(child: Divider(color: Colors.white24)),
                         ],
                       ),
-
                       const SizedBox(height: 20),
-
-                      // Registro
                       Row(
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [

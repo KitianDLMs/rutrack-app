@@ -80,30 +80,6 @@ class GeolocatorRepositoryImpl implements GeolocatorRepository {
     }
   }
 
-  // Future<List<LatLng>> getPolyline(
-  //     LatLng pickUpLatLng,
-  //     LatLng destinationLatLng) async {
-
-  //   PolylineResult result = await PolylinePoints().getRouteBetweenCoordinates(
-  //     googleApiKey: API_KEY_GOOGLE,
-  //     request: PolylineRequest(
-  //       origin: PointLatLng(pickUpLatLng.latitude, pickUpLatLng.longitude),
-  //       destination: PointLatLng(destinationLatLng.latitude, destinationLatLng.longitude),
-  //       mode: TravelMode.driving,
-  //     ),
-  //   );
-
-  //   List<LatLng> polylineCoordinates = [];
-
-  //   if (result.points.isNotEmpty) {
-  //     for (var point in result.points) {
-  //       polylineCoordinates.add(LatLng(point.latitude, point.longitude));
-  //     }
-  //   }
-
-  //   return polylineCoordinates;
-  // }
-
   @override
   Stream<Position> getPositionStream() {
     LocationSettings locationSettings =

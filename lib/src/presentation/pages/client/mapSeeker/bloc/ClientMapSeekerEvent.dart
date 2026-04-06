@@ -49,11 +49,31 @@ class AddDriverPositionMarker extends ClientMapSeekerEvent {
   final double lat;
   final double lng;
 
+  // NUEVA INFO DEL CAMIÓN
+  final String? brand;
+  final String? plate;
+  final String? truckType;
+  final String? maxWeight;
+  final String? weightUnit;
+  final bool? hasHelpers;
+  final bool? hasCrane;
+  final double? maxVolume;
+  final String? color;
+
   AddDriverPositionMarker({
     required this.idSocket,
     required this.id,
     required this.lat,
     required this.lng,
-  });
 
+    this.brand,
+    this.plate,
+    this.truckType,
+    this.maxWeight,
+    this.weightUnit,
+    this.hasHelpers,
+    this.hasCrane,
+    this.maxVolume,
+    this.color,
+  });
 }

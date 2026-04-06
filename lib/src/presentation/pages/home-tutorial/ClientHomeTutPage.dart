@@ -93,7 +93,7 @@ class _ClientHomeTutPageState extends State<ClientHomeTutPage> {
             },
             children: [
               _buildFirstTutorialPage(
-                title: "Rutrack",
+                title: "Flete",
                 description:
                     "(para solicitar tu conductor debes iniciar sesión)",
                 image: Icons.motorcycle,

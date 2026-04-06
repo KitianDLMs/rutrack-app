@@ -19,7 +19,7 @@
 	</array>
 	<!-- End of the Google Sign-in Section -->
 	<key>NSLocationWhenInUseUsageDescription</key>
-	<string>RuTrack utiliza tu ubicación para mostrar tu posición en el mapa, calcular rutas de transporte y conectar usuarios con conductores cercanos. </string>
+	<string>Flete utiliza tu ubicación para mostrar tu posición en el mapa, calcular rutas de transporte y conectar usuarios con conductores cercanos. </string>
 	<key>NSLocationAlwaysAndWhenInUseUsageDescription</key>
 	<string>Esta aplicación utiliza tu ubicación para mejorar la precisión del servicio.</string>
 	<key>NSLocalNetworkUsageDescription</key>
@@ -31,7 +31,7 @@
 	<key>CFBundleDevelopmentRegion</key>
 	<string>$(DEVELOPMENT_LANGUAGE)</string>
 	<key>CFBundleDisplayName</key>
-	<string>Rutrack</string>
+	<string>Flete</string>
 	<key>CFBundleExecutable</key>
 	<string>$(EXECUTABLE_NAME)</string>
 	<key>CFBundleIdentifier</key>
@@ -39,7 +39,7 @@
 	<key>CFBundleInfoDictionaryVersion</key>
 	<string>6.0</string>
 	<key>CFBundleName</key>
-	<string>Rutrack</string>
+	<string>Flete</string>
 	<key>CFBundlePackageType</key>
 	<string>APPL</string>
 	<key>CFBundleShortVersionString</key>

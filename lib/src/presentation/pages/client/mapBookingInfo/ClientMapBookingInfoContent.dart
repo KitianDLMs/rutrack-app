@@ -51,89 +51,212 @@ class ClientMapBookingInfoContent extends StatelessWidget {
           topRight: Radius.circular(30),
         )
       ),
-      child: Column(
-        children: [
-          ListTile(
-            title: Text(
-              'Recoger en',
-              style: TextStyle(
-                fontSize: 15
+      child: SingleChildScrollView(
+        child: Column(
+          children: [
+            ListTile(
+              title: Text(
+                'Recoger en',
+                style: TextStyle(
+                  fontSize: 15
+                ),
+              ),
+              subtitle: Text(
+                state.pickUpDescription,
+                style: TextStyle(
+                  fontSize: 13
+                ),
+              ),
+              leading: Icon(Icons.location_on),
+            ),
+            ListTile(
+              title: Text(
+                'Dejar en',
+                style: TextStyle(
+                  fontSize: 15
+                ),
+              ),
+              subtitle: Text(
+                state.destinationDescription,
+                style: TextStyle(
+                  fontSize: 13
+                ),
+              ),
+              leading: Icon(Icons.my_location),
+            ),
+            ListTile(
+              title: Text(
+                'Tiempo y distancia aproximados',
+                style: TextStyle(
+                  fontSize: 15
+                ),
+              ),
+              subtitle: Text(
+                '${timeAndDistanceValues.distance.text} y ${timeAndDistanceValues.duration.text}',
+                style: TextStyle(
+                  fontSize: 13
+                ),
+              ),
+              leading: Icon(Icons.timer),
+            ),
+            ListTile(
+              title: Text(
+                'Precios recomendados',
+                style: TextStyle(
+                  fontSize: 15
+                ),
+              ),
+              subtitle: Text(
+                '\$${timeAndDistanceValues.recommendedValue}',
+                style: TextStyle(
+                  fontSize: 13
+                ),
+              ),
+              leading: Icon(Icons.money),
+            ),
+            DefaultTextField(
+              margin: EdgeInsets.only(left: 15, right: 15),
+              text: 'OFRECE TU TARIFA', 
+              icon: Icons.attach_money, 
+              keyboardType: TextInputType.phone,
+              onChanged: (text) {
+                context.read<ClientMapBookingInfoBloc>().add(FareOfferedChanged(fareOffered: BlocFormItem(value: text)));
+              },
+              validator: (value) {
+                return state.fareOffered.error;
+              },
+            ),
+            Divider(),
+            Padding(
+              padding: EdgeInsets.symmetric(vertical: 5),
+              child: Text(
+                'DETALLES DE LA CARGA',
+                style: TextStyle(fontWeight: FontWeight.bold),
               ),
             ),
-            subtitle: Text(
-              state.pickUpDescription,
-              style: TextStyle(
-                fontSize: 13
+        
+            // PESO
+            DefaultTextField(
+              margin: EdgeInsets.only(left: 15, right: 15),
+              text: 'PESO DE LA CARGA',
+              icon: Icons.scale,
+              keyboardType: TextInputType.number,
+              onChanged: (text) {
+                context.read<ClientMapBookingInfoBloc>().add(
+                  CargoWeightChanged(
+                    cargoWeight: BlocFormItem(value: text)
+                  )
+                );
+              },
+              validator: (value) {
+                return state.cargoWeight.error;
+              },
+            ),
+        
+            DropdownButtonFormField(
+              value: state.cargoWeightUnit,
+              items: ['KG', 'TON']
+                  .map((unit) => DropdownMenuItem(
+                        value: unit,
+                        child: Text(unit),
+                      ))
+                  .toList(),
+              onChanged: (value) {
+                context.read<ClientMapBookingInfoBloc>().add(
+                  CargoWeightUnitChanged(unit: value.toString())
+                );
+              },
+              decoration: InputDecoration(
+                labelText: 'Unidad de peso',
+                prefixIcon: Icon(Icons.straighten),
               ),
             ),
-            leading: Icon(Icons.location_on),
-          ),
-          ListTile(
-            title: Text(
-              'Dejar en',
-              style: TextStyle(
-                fontSize: 15
+        
+            DropdownButtonFormField(
+              value: state.truckTypeRequired,
+              items: ['Camioneta', '3/4', 'Camión', 'Camión grande']
+                  .map((type) => DropdownMenuItem(
+                        value: type,
+                        child: Text(type),
+                      ))
+                  .toList(),
+              onChanged: (value) {
+                context.read<ClientMapBookingInfoBloc>().add(
+                  TruckTypeChanged(type: value.toString())
+                );
+              },
+              decoration: InputDecoration(
+                labelText: 'Tipo de camión requerido',
+                prefixIcon: Icon(Icons.local_shipping),
               ),
             ),
-            subtitle: Text(
-              state.destinationDescription,
-              style: TextStyle(
-                fontSize: 13
+        
+            DropdownButtonFormField(
+              value: state.cargoType,
+              items: [
+                'General',
+                'Pallets',
+                'Material de construcción',
+                'Mudanza',
+                'Maquinaria',
+                'Frágil'
+              ]
+                  .map((type) => DropdownMenuItem(
+                        value: type,
+                        child: Text(type),
+                      ))
+                  .toList(),
+              onChanged: (value) {
+                context.read<ClientMapBookingInfoBloc>().add(
+                  CargoTypeChanged(type: value.toString())
+                );
+              },
+              decoration: InputDecoration(
+                labelText: 'Tipo de carga',
+                prefixIcon: Icon(Icons.inventory),
               ),
             ),
-            leading: Icon(Icons.my_location),
-          ),
-          ListTile(
-            title: Text(
-              'Tiempo y distancia aproximados',
-              style: TextStyle(
-                fontSize: 15
-              ),
+        
+            // AYUDANTES
+            SwitchListTile(
+              title: Text('Necesita ayudantes'),
+              value: state.helpersRequired,
+              onChanged: (value) {
+                context.read<ClientMapBookingInfoBloc>().add(
+                  HelpersRequiredChanged(value: value)
+                );
+              },
             ),
-            subtitle: Text(
-              '${timeAndDistanceValues.distance.text} y ${timeAndDistanceValues.duration.text}',
-              style: TextStyle(
-                fontSize: 13
-              ),
+        
+            SwitchListTile(
+              title: Text('Necesita grúa'),
+              value: state.requiresCrane,
+              onChanged: (value) {
+                context.read<ClientMapBookingInfoBloc>().add(
+                  RequiresCraneChanged(value: value)
+                );
+              },
             ),
-            leading: Icon(Icons.timer),
-          ),
-          ListTile(
-            title: Text(
-              'Precios recomendados',
-              style: TextStyle(
-                fontSize: 15
-              ),
+        
+            SwitchListTile(
+              title: Text('Carga frágil'),
+              value: state.fragileCargo,
+              onChanged: (value) {
+                context.read<ClientMapBookingInfoBloc>().add(
+                  FragileCargoChanged(value: value)
+                );
+              },
             ),
-            subtitle: Text(
-              '\$${timeAndDistanceValues.recommendedValue}',
-              style: TextStyle(
-                fontSize: 13
-              ),
-            ),
-            leading: Icon(Icons.money),
-          ),
-          DefaultTextField(
-            margin: EdgeInsets.only(left: 15, right: 15),
-            text: 'OFRECE TU TARIFA', 
-            icon: Icons.attach_money, 
-            keyboardType: TextInputType.phone,
-            onChanged: (text) {
-              context.read<ClientMapBookingInfoBloc>().add(FareOfferedChanged(fareOffered: BlocFormItem(value: text)));
-            },
-            validator: (value) {
-              return state.fareOffered.error;
-            },
-          ),
-          _actionProfile(
-            'BUSCAR CONDUCTOR',
-            Icons.search,
-            () {
-              print('CLICK BUSCAR CONDUCTOR');
-              context.read<ClientMapBookingInfoBloc>().add(CreateClientRequest());
-            }
-          )
-        ],
+            _actionProfile(
+              'BUSCAR CONDUCTOR',
+              Icons.search,
+              () {
+                print('CLICK BUSCAR CONDUCTOR');
+                context.read<ClientMapBookingInfoBloc>().add(CreateClientRequest());
+              }
+            )
+          ],
+        ),
       )
     );
   }

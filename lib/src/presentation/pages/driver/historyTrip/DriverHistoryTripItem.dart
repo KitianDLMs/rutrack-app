@@ -54,9 +54,9 @@ class DriverHistoryTripItem extends StatelessWidget {
   Widget _listTileClient() {
     return ListTile(
       title: Text('Cliente'),
-      subtitle: Text('${clientRequest.client.name} ${clientRequest.client.lastname}'),
+      subtitle: Text('${clientRequest.client!.name} ${clientRequest.client!.lastname}'),
       trailing: DefaultImageUrl(
-        url: clientRequest.client.image,
+        url: clientRequest.client!.image,
         width: 50,
       ),
     );

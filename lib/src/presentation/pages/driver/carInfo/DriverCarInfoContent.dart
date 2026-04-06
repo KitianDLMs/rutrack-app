@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:localdriver/src/domain/models/DriverCarInfo.dart';
 import 'package:localdriver/src/presentation/pages/driver/carInfo/bloc/DriverCarInfoBloc.dart';
 import 'package:localdriver/src/presentation/pages/driver/carInfo/bloc/DriverCarInfoEvent.dart';
 import 'package:localdriver/src/presentation/pages/driver/carInfo/bloc/DriverCarInfoState.dart';
@@ -28,10 +27,7 @@ class DriverCarInfoContent extends StatelessWidget {
               SizedBox(height: 35,)
             ],
           ),
-          _cardUserInfo(context),
-          // DefaultIconBack(
-          //   margin: EdgeInsets.only(top: 20, left: 30),
-          // )
+          _cardUserInfo(context)
         ],
       ),
     );
@@ -41,54 +37,135 @@ class DriverCarInfoContent extends StatelessWidget {
     return Container(
       margin: EdgeInsets.only(left: 35, right: 35, top: 100),
       width: MediaQuery.of(context).size.width,
-      height: MediaQuery.of(context).size.height * 0.35,
+      height: MediaQuery.of(context).size.height * 0.60,
       child: Card(
         color: Colors.white,
         surfaceTintColor: Colors.white,
-        child: Column(
-          children: [
-            SizedBox(height: 40),
-            DefaultTextField(
-              text: 'Marca del vehiculo', 
-              icon: Icons.person, 
-              margin: EdgeInsets.only(left: 30, right: 30, top: 15),
-              backgroundColor: Colors.grey[200]!,
-              initialValue: state.brand.value,
-              onChanged: (text) {
-                context.read<DriverCarInfoBloc>().add(BrandChanged(brand: BlocFormItem(value: text)));
-              },
-              validator: (value) {
-                return state.brand.error;
-              },
-            ),
-            DefaultTextField(
-              text: 'Placa del vehiculo', 
-              icon: Icons.person_outline, 
-              backgroundColor: Colors.grey[200]!,
-              initialValue: state.plate.value,
-              margin: EdgeInsets.only(left: 30, right: 30, top: 15),
-              keyboardType: TextInputType.phone,
-              onChanged: (text) {
-                context.read<DriverCarInfoBloc>().add(PlateChanged(plate: BlocFormItem(value: text)));
-              },
-              validator: (value) {
-                return state.plate.error;
-              },
-            ),
-            DefaultTextField(
-              text: 'Color', 
-              icon: Icons.phone,
-              initialValue: state.color.value,
-              margin: EdgeInsets.only(left: 30, right: 30, top: 15),
-              backgroundColor: Colors.grey[200]!, 
-              onChanged: (text) {
-                context.read<DriverCarInfoBloc>().add(ColorChanged(color: BlocFormItem(value: text)));
-              },
-              validator: (value) {
-                return state.color.error;
-              },
-            ),
-          ],
+        child: SingleChildScrollView(
+          child: Column(
+            children: [
+              SizedBox(height: 40),
+              DefaultTextField(
+                text: 'Marca del vehiculo', 
+                icon: Icons.person, 
+                margin: EdgeInsets.only(left: 30, right: 30, top: 15),
+                backgroundColor: Colors.grey[200]!,
+                initialValue: state.brand.value,
+                onChanged: (text) {
+                  context.read<DriverCarInfoBloc>().add(BrandChanged(brand: BlocFormItem(value: text)));
+                },
+                validator: (value) {
+                  return state.brand.error;
+                },
+              ),
+              DefaultTextField(
+                text: 'Placa del vehiculo', 
+                icon: Icons.person_outline, 
+                backgroundColor: Colors.grey[200]!,
+                initialValue: state.plate.value,
+                margin: EdgeInsets.only(left: 30, right: 30, top: 15),
+                keyboardType: TextInputType.phone,
+                onChanged: (text) {
+                  context.read<DriverCarInfoBloc>().add(PlateChanged(plate: BlocFormItem(value: text)));
+                },
+                validator: (value) {
+                  return state.plate.error;
+                },
+              ),
+              DefaultTextField(
+                text: 'Color', 
+                icon: Icons.phone,
+                initialValue: state.color.value,
+                margin: EdgeInsets.only(left: 30, right: 30, top: 15),
+                backgroundColor: Colors.grey[200]!, 
+                onChanged: (text) {
+                  context.read<DriverCarInfoBloc>().add(ColorChanged(color: BlocFormItem(value: text)));
+                },
+                validator: (value) {
+                  return state.color.error;
+                },
+              ),
+              DefaultTextField(
+                text: 'Peso máximo que soporta',
+                icon: Icons.scale,
+                backgroundColor: Colors.grey[200]!,
+                margin: EdgeInsets.only(left: 30, right: 30, top: 15),
+                keyboardType: TextInputType.number,
+                onChanged: (text) {
+                  context.read<DriverCarInfoBloc>().add(
+                    MaxWeightChanged(maxWeight: BlocFormItem(value: text))
+                  );
+                },
+                validator: (value) {
+                  return state.maxWeight.error;
+                },
+              ),
+              Container(
+                margin: EdgeInsets.only(left: 30, right: 30, top: 15),
+                child: DropdownButtonFormField(
+                  value: state.weightUnit,
+                  decoration: InputDecoration(
+                    prefixIcon: Icon(Icons.straighten),
+                    filled: true,
+                    fillColor: Colors.grey[200],
+                    labelText: 'Unidad de peso'
+                  ),
+                  items: ['KG', 'TON']
+                      .map((unit) => DropdownMenuItem(
+                            value: unit,
+                            child: Text(unit),
+                          ))
+                      .toList(),
+                  onChanged: (value) {
+                    context.read<DriverCarInfoBloc>().add(
+                      WeightUnitChanged(unit: value.toString())
+                    );
+                  },
+                ),
+              ),
+              Container(
+                margin: EdgeInsets.only(left: 30, right: 30, top: 15),
+                child: DropdownButtonFormField(
+                  value: state.truckType,
+                  decoration: InputDecoration(
+                    prefixIcon: Icon(Icons.local_shipping),
+                    filled: true,
+                    fillColor: Colors.grey[200],
+                    labelText: 'Tipo de camión'
+                  ),
+                  items: ['Camioneta', '3/4', 'Camión', 'Camión grande']
+                      .map((type) => DropdownMenuItem(
+                            value: type,
+                            child: Text(type),
+                          ))
+                      .toList(),
+                  onChanged: (value) {
+                    context.read<DriverCarInfoBloc>().add(
+                      TruckTypeChanged(type: value.toString())
+                    );
+                  },
+                ),
+              ),
+              SwitchListTile(
+                title: Text('Tiene ayudantes'),
+                value: state.hasHelpers,
+                onChanged: (value) {
+                  context.read<DriverCarInfoBloc>().add(
+                    HelpersChanged(value: value)
+                  );
+                },
+              ),
+              SwitchListTile(
+                title: Text('Tiene grúa'),
+                value: state.hasCrane,
+                onChanged: (value) {
+                  context.read<DriverCarInfoBloc>().add(
+                    CraneChanged(value: value)
+                  );
+                },
+              ),
+            ],
+          ),
         ),
       ),
     );

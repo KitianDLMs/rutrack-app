@@ -104,12 +104,6 @@ class RegisterBloc extends Bloc<RegisterEvent, RegisterState> {
     });
 
     on<FormSubmit>((event, emit) async {
-      print('Name: ${state.name.value}');
-      print('LastName: ${state.lastname.value}');
-      print('email: ${state.email.value}');
-      print('phone: ${state.phone.value}');
-      print('password: ${state.password.value}');
-      print('confirmPassword: ${state.confirmPassword.value}');
       emit(
         state.copyWith(
           response: Loading(),

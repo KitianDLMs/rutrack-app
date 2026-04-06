@@ -20,4 +20,29 @@ class ColorChanged extends DriverCarInfoEvent {
   ColorChanged({ required this.color });
 }
 
+class MaxWeightChanged extends DriverCarInfoEvent {
+  final BlocFormItem maxWeight;
+  MaxWeightChanged({ required this.maxWeight });
+}
+
+class WeightUnitChanged extends DriverCarInfoEvent {
+  final String unit;
+  WeightUnitChanged({ required this.unit });
+}
+
+class TruckTypeChanged extends DriverCarInfoEvent {
+  final String type;
+  TruckTypeChanged({ required this.type });
+}
+
+class HelpersChanged extends DriverCarInfoEvent {
+  final bool value;
+  HelpersChanged({ required this.value });
+}
+
+class CraneChanged extends DriverCarInfoEvent {
+  final bool value;
+  CraneChanged({ required this.value });
+}
+
 class FormSubmit extends DriverCarInfoEvent {}

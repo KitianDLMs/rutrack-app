@@ -83,6 +83,51 @@ class ClientMapBookingInfoBloc extends Bloc<ClientMapBookingInfoEvent, ClientMap
       );
     });
 
+    on<CargoWeightChanged>((event, emit) {
+      emit(state.copyWith(
+        cargoWeight: BlocFormItem(
+          value: event.cargoWeight.value,
+          error: event.cargoWeight.value.isEmpty ? 'Ingresa el peso' : null
+        )
+      ));
+    });
+
+    on<CargoWeightUnitChanged>((event, emit) {
+      emit(state.copyWith(
+        cargoWeightUnit: event.unit
+      ));
+    });
+
+    on<TruckTypeChanged>((event, emit) {
+      emit(state.copyWith(
+        truckTypeRequired: event.type
+      ));
+    });
+
+    on<CargoTypeChanged>((event, emit) {
+      emit(state.copyWith(
+        cargoType: event.type
+      ));
+    });
+
+    on<HelpersRequiredChanged>((event, emit) {
+      emit(state.copyWith(
+        helpersRequired: event.value
+      ));
+    });
+
+    on<RequiresCraneChanged>((event, emit) {
+      emit(state.copyWith(
+        requiresCrane: event.value
+      ));
+    });
+
+    on<FragileCargoChanged>((event, emit) {
+      emit(state.copyWith(
+        fragileCargo: event.value
+      ));
+    });
+
    on<CreateClientRequest>((event, emit) async {
 
       print("CLICK CREATE REQUEST");
@@ -96,6 +141,26 @@ class ClientMapBookingInfoBloc extends Bloc<ClientMapBookingInfoEvent, ClientMap
         print("USER ID: ${authResponse.user.id}");
 
         print("FARE: ${state.fareOffered.value}");
+        final request = ClientRequest(
+          idClient: authResponse.user.id!, 
+          fareOffered: double.tryParse(state.fareOffered.value) ?? 0, 
+          pickupDescription: state.pickUpDescription, 
+          destinationDescription: state.destinationDescription, 
+          pickupLat: state.pickUpLatLng!.latitude, 
+          pickupLng: state.pickUpLatLng!.longitude, 
+          destinationLat: state.destinationLatLng!.latitude, 
+          destinationLng: state.destinationLatLng!.longitude, 
+          cargoWeight: double.tryParse(state.cargoWeight.value) ?? 0, 
+          cargoWeightUnit: state.cargoWeightUnit, 
+          truckTypeRequired: state.truckTypeRequired, 
+          cargoType: state.cargoType, 
+          helpersRequired: state.helpersRequired, 
+          requiresCrane: state.requiresCrane, 
+          fragileCargo: state.fragileCargo            
+        );
+
+        print("JSON QUE ENVIA FLUTTER:");
+        print(request.toJson());
 
         Resource<int> response = await clientRequestsUseCases.createClientRequest.run(
           ClientRequest(
@@ -106,11 +171,18 @@ class ClientMapBookingInfoBloc extends Bloc<ClientMapBookingInfoEvent, ClientMap
             pickupLat: state.pickUpLatLng!.latitude, 
             pickupLng: state.pickUpLatLng!.longitude, 
             destinationLat: state.destinationLatLng!.latitude, 
-            destinationLng: state.destinationLatLng!.longitude
+            destinationLng: state.destinationLatLng!.longitude, 
+            cargoWeight: double.tryParse(state.cargoWeight.value) ?? 0, 
+            cargoWeightUnit: state.cargoWeightUnit, 
+            truckTypeRequired: state.truckTypeRequired, 
+            cargoType: state.cargoType, 
+            helpersRequired: state.helpersRequired, 
+            requiresCrane: state.requiresCrane, 
+            fragileCargo: state.fragileCargo            
           )
         );
-
-        print("RESPONSE: $response");
+      
+        print("RESPONSE: ${response}");
 
         emit(
           state.copyWith(

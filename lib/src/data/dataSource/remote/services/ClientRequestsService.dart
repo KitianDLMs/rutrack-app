@@ -134,10 +134,6 @@ class ClientRequestsService {
     double destinationLat, 
     double destinationLng
   ) async {
-    print('originLat $originLat');
-    print('originLng $originLng');
-    print('destinationLat $destinationLat');
-    print('destinationLng $destinationLng');
     try {
       Uri url = Uri.https(ApiConfig.API_PROJECT, '/client-requests/${originLat}/${originLng}/${destinationLat}/${destinationLng}');
       Map<String, String> headers = { 'Content-Type': 'application/json' };
@@ -165,11 +161,11 @@ class ClientRequestsService {
       final response = await http.get(url, headers: headers);
       final data = json.decode(response.body);
       if (response.statusCode == 200 || response.statusCode == 201) {
-        List<ClientRequestResponse> clientRequests = ClientRequestResponse.fromJsonList(data);
+        List<ClientRequestResponse> clientRequests =
+            ClientRequestResponse.fromJsonList(data);
         return Success(clientRequests);
-      }
-      else {
-        return ErrorData(listToString(data['message']));
+      } else {
+        return ErrorData(response.body);
       }
       
     } catch (e) {
@@ -223,7 +219,7 @@ class ClientRequestsService {
     try {
       Uri url = Uri.https(ApiConfig.API_PROJECT, '/client-requests/${idClientRequest}');
       Map<String, String> headers = { 'Content-Type': 'application/json' };
-      final response = await http.get(url, headers: headers);
+      final response = await http.get(url, headers: headers);      
       final data = json.decode(response.body);
       if (response.statusCode == 200 || response.statusCode == 201) {
         ClientRequestResponse clientRequests = ClientRequestResponse.fromJson(data);

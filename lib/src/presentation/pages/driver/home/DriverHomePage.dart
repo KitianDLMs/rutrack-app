@@ -35,20 +35,8 @@ class _DriverHomePageState extends State<DriverHomePage> {
     return Scaffold(
       appBar: AppBar(
         title: Text(
-          'LOCAL DRIVER',
+          'Flete',
         ),
-        // flexibleSpace: Container(
-        //   decoration: BoxDecoration(
-        //     gradient: LinearGradient(
-        //       begin: Alignment.topRight,
-        //       end: Alignment.bottomLeft,
-        //       colors: [
-        //         Color.fromARGB(255, 12, 38, 145),
-        //         Color.fromARGB(255, 34, 156, 249),
-        //       ]
-        //     ),
-        //   )
-        // ),
       ),
       body: BlocBuilder<DriverHomeBloc, DriverHomeState>(
         builder: (context, state) {

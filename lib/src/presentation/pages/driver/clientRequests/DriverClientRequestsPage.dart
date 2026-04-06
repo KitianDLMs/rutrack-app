@@ -21,6 +21,7 @@ class DriverClientRequestsPage extends StatefulWidget {
 class _DriverClientRequestsPageState extends State<DriverClientRequestsPage> {
   @override
   void initState() {
+    print('object');
     super.initState();
     WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
       context.read<DriverClientRequestsBloc>().add(InitDriverClientRequest());
@@ -31,6 +32,7 @@ class _DriverClientRequestsPageState extends State<DriverClientRequestsPage> {
 
   @override
   Widget build(BuildContext context) {
+     print('REBUILD DRIVER REQUESTS PAGE');
     return Scaffold(
       body: BlocListener<DriverClientRequestsBloc, DriverClientRequestsState>(
         listener: (context, state) {
@@ -45,6 +47,8 @@ class _DriverClientRequestsPageState extends State<DriverClientRequestsPage> {
         child: BlocBuilder<DriverClientRequestsBloc, DriverClientRequestsState>(
             builder: (context, state) {
           final response = state.response;
+          print('responsex3 $response');
+          print('responsex3 ${state.response}');
           if (response is Loading) {
             return Center(child: CircularProgressIndicator());
           }                

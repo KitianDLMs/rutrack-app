@@ -20,7 +20,52 @@ class DriverCarInfoBloc extends Bloc<DriverCarInfoEvent, DriverCarInfoState> {
   final formKey = GlobalKey<FormState>();
 
   DriverCarInfoBloc(this.authUseCases, this.driverCarInfoUseCases): super(DriverCarInfoState()) {
+
+    on<HelpersChanged>((event, emit) {
+      emit(
+        state.copyWith(
+          hasHelpers: event.value,
+          formKey: formKey
+        )
+      );
+    });
+
+    on<CraneChanged>((event, emit) {
+      emit(
+        state.copyWith(
+          hasCrane: event.value,
+          formKey: formKey
+        )
+      );
+    });
     
+    on<MaxWeightChanged>((event, emit) {
+      emit(
+        state.copyWith(
+          maxWeight: BlocFormItem(value: event.maxWeight.value),
+          formKey: formKey
+        )
+      );
+    });
+
+    on<WeightUnitChanged>((event, emit) {
+      emit(
+        state.copyWith(
+          weightUnit: event.unit,
+          formKey: formKey
+        )
+      );
+    });
+
+    on<TruckTypeChanged>((event, emit) {
+      emit(
+        state.copyWith(
+          truckType: event.type,
+          formKey: formKey
+        )
+      );
+    });
+
     on<DriverCarInfoInitEvent>((event, emit) async {
       emit(
         state.copyWith(
@@ -93,12 +138,25 @@ class DriverCarInfoBloc extends Bloc<DriverCarInfoEvent, DriverCarInfoState> {
       );
       AuthResponse authResponse = await authUseCases.getUserSession.run();
       Resource response = await driverCarInfoUseCases.createDriverCarInfo.run(
-        DriverCarInfo(
-          idDriver: authResponse.user.id,
-          brand: state.brand.value, 
-          plate: state.plate.value, 
-          color: state.color.value
-        )
+          DriverCarInfo(
+            idDriver: authResponse.user.id,
+            brand: state.brand.value,
+            plate: state.plate.value,
+            color: state.color.value,
+
+            maxWeight: state.maxWeight.value.isNotEmpty
+                ? state.maxWeight.value
+                : '0',
+            weightUnit: state.weightUnit,
+            truckType: state.truckType,
+
+            maxVolume: state.maxVolume.value.isNotEmpty
+                ? double.tryParse(state.maxVolume.value)
+                : null,
+
+            hasHelpers: state.hasHelpers,
+            hasCrane: state.hasCrane,
+          )
       );
       emit(
         state.copyWith(

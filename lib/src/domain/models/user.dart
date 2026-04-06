@@ -29,14 +29,16 @@ class User {
 
     factory User.fromJson(Map<String, dynamic> json) => User(
         id: json["id"],
-        name: json["name"],
-        lastname: json["lastName"],
-        email: json["email"],
-        phone: json["phone"],
-        image: json["image"],
-        password: json['password'],
-        notificationToken: json["notification_token"],
-        roles: json["roles"] != null ? List<Role>.from(json["roles"].map((x) => Role.fromJson(x))) : [],
+        name: json["name"] ?? '',
+        lastname: json["lastname"] ?? '',
+        email: json["email"] ?? '',
+        phone: json["phone"] ?? '',
+        image: json["image"] ?? '',
+        password: json['password'] ?? '',
+        notificationToken: json["notification_token"] ?? '',
+        roles: json["roles"] != null
+            ? List<Role>.from(json["roles"].map((x) => Role.fromJson(x)))
+            : [],
     );
 
     Map<String, dynamic> toJson() => {

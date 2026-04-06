@@ -26,11 +26,11 @@ class DriverMapLocationBloc extends Bloc<DriverMapLocationEvent, DriverMapLocati
   DriverMapLocationBloc(this.blocSocketIO, this.geolocatorUseCases, this.socketUseCases, this.authUseCases, this.driversPositionUseCases): super(DriverMapLocationState()) {
     
     on<DriverMapLocationInitEvent>((event, emit) async {
-      Completer<GoogleMapController> controller = Completer<GoogleMapController>();
+      // Completer<GoogleMapController> controller = Completer<GoogleMapController>();
       AuthResponse authResponse = await authUseCases.getUserSession.run();
       emit(
         state.copyWith(
-          controller: controller,
+          // controller: controller,
           idDriver: authResponse.user.id
         )
       );
@@ -77,21 +77,17 @@ class DriverMapLocationBloc extends Bloc<DriverMapLocationEvent, DriverMapLocati
       );
     });
 
-    on<ChangeMapCameraPosition>((event, emit) async {
-      try {
-        GoogleMapController googleMapController = await state.controller!.future;
-        await googleMapController.animateCamera(CameraUpdate.newCameraPosition(
-          CameraPosition(
+    on<ChangeMapCameraPosition>((event, emit) {
+      emit(
+        state.copyWith(
+          cameraPosition: CameraPosition(
             target: LatLng(event.lat, event.lng),
             zoom: 13,
             bearing: 0
           )
-        ));
-      } catch (e) {
-        print('ERROR EN ChangeMapCameraPosition: $e');
-      }
-      
-    });  
+        )
+      );
+    });
 
     on<UpdateLocation>((event, emit) async {
       add(AddMyPositionMarker(lat: event.position.latitude, lng: event.position.longitude));

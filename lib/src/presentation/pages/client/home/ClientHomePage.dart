@@ -144,7 +144,7 @@ class _ClientHomePageState extends State<ClientHomePage> {
                       builder: (context) {
                         return AlertDialog(
                           title: Text('Cerrar sesión'),
-                          content: Text('¿Estás seguro que quieres salir de la app Rutrack?'),
+                          content: Text('¿Estás seguro que quieres salir de la app Flete?'),
                           actions: [
 
                             TextButton(

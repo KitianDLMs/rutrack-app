@@ -1,8 +1,14 @@
 import 'dart:convert';
 import 'package:localdriver/src/domain/models/DriverCarInfo.dart';
 
-ClientRequestResponse clientRequestResponseFromJson(String str) => ClientRequestResponse.fromJson(json.decode(str));
-String clientRequestResponseToJson(ClientRequestResponse data) => json.encode(data.toJson());
+List<ClientRequestResponse> clientRequestResponseFromJson(String str) {
+  final List<dynamic> jsonData = json.decode(str);
+  return ClientRequestResponse.fromJsonList(jsonData);
+}
+    
+
+String clientRequestResponseToJson(ClientRequestResponse data) =>
+    json.encode(data.toJson());
 
 class ClientRequestResponse {
   int id;
@@ -16,12 +22,20 @@ class ClientRequestResponse {
   Position destinationPosition;
   double? distance;
   String? timeDifference;
-  Client client;
+  Client? client;
   Client? driver;
   GoogleDistanceMatrix? googleDistanceMatrix;
   int? idDriverAssigned;
   double? fareAssigned;
+  double? clientRating;
+  double? driverRating;
+  String? status;
   DriverCarInfo? car;
+  String? requiredWeight;
+  String? weightUnit;
+  String? truckType;
+  bool? requireHelpers;
+  bool? requireCrane;
 
   ClientRequestResponse({
     required this.id,
@@ -39,41 +53,107 @@ class ClientRequestResponse {
     this.googleDistanceMatrix,
     this.fareAssigned,
     this.idDriverAssigned,
+    this.clientRating,
+    this.driverRating,
+    this.status,
     this.driver,
     this.car,
+    this.requiredWeight,
+    this.weightUnit,
+    this.truckType,
+    this.requireHelpers,
+    this.requireCrane,
   });
 
   static List<ClientRequestResponse> fromJsonList(List<dynamic> jsonList) {
-    return jsonList.map((json) => ClientRequestResponse.fromJson(json)).toList();
+    List<ClientRequestResponse> list = [];
+
+    for (var json in jsonList) {
+      try {
+        list.add(ClientRequestResponse.fromJson(json));
+      } catch (e) {
+        print('💥 ERROR EN ITEM: $json');
+        print('💥 ERROR: $e');
+      }
+    }
+
+    return list;
   }
 
-  factory ClientRequestResponse.fromJson(Map<String, dynamic> json) => ClientRequestResponse(
-        id: json["id"],
+  factory ClientRequestResponse.fromJson(Map<String, dynamic> json) {
+    try {
+      return ClientRequestResponse(
+        id: json["id"] is int ? json["id"] : int.tryParse(json["id"].toString()) ?? 0,
         idClient: json["id_client"],
         fareOffered: json["fare_offered"]?.toString() ?? "0",
-        pickupDescription: json["pickup_description"],
-        destinationDescription: json["destination_description"],
-        updatedAt: DateTime.parse(json["updated_at"]),
-        createdAt: json["created_at"] != null ? DateTime.parse(json["created_at"]) : null,
+        pickupDescription: json["pickup_description"] ?? "",
+        destinationDescription: json["destination_description"] ?? "",
+        updatedAt: json["updated_at"] != null
+            ? DateTime.tryParse(json["updated_at"]) ?? DateTime.now()
+            : DateTime.now(),
+        createdAt: json["created_at"] != null
+            ? DateTime.tryParse(json["created_at"])
+            : null,
         pickupPosition: Position(
-          lat: json["pickup_lat"]?.toDouble() ?? 0,
-          lng: json["pickup_lng"]?.toDouble() ?? 0,
+          lat: (json["pickup_lat"] ?? 0).toDouble(),
+          lng: (json["pickup_lng"] ?? 0).toDouble(),
         ),
         destinationPosition: Position(
-          lat: json["destination_lat"]?.toDouble() ?? 0,
-          lng: json["destination_lng"]?.toDouble() ?? 0,
-        ),
-        distance: json["distance"]?.toDouble(),
-        timeDifference: json["time_difference"],
-        client: Client.fromJson(json["client"]),
-        driver: json["driver"] != null ? Client.fromJson(json["driver"]) : null,
+          lat: (json["destination_lat"] ?? 0).toDouble(),
+          lng: (json["destination_lng"] ?? 0).toDouble(),
+        ),        
+        distance: json["distance"] != null
+          ? double.tryParse(json["distance"].toString()) ?? 0
+          : 0,
+
+        timeDifference: json["time_difference"]?.toString(),
+
+        client: json["client"] != null
+            ? Client.fromJson(json["client"])
+            : null,
+
+        driver: json["driver"] != null
+            ? Client.fromJson(json["driver"])
+            : null,
+
         idDriverAssigned: json["id_driver_assigned"],
-        fareAssigned: json["fare_assigned"]?.toDouble(),
+
+        fareAssigned: json["fare_assigned"] != null
+          ? double.tryParse(json["fare_assigned"].toString())
+          : null,
+
+        clientRating: json["client_rating"] != null
+            ? (json["client_rating"]).toDouble()
+            : null,
+
+        driverRating: json["driver_rating"] != null
+            ? (json["driver_rating"]).toDouble()
+            : null,
+
+        status: json["status"],
+
         googleDistanceMatrix: json["google_distance_matrix"] != null
             ? GoogleDistanceMatrix.fromJson(json["google_distance_matrix"])
             : null,
-        car: json["car"] != null ? DriverCarInfo.fromJson(json["car"]) : null,
+
+        car: json["car"] != null
+            ? DriverCarInfo.fromJson(json["car"])
+            : null,
+
+        requiredWeight: json['cargo_weight']?.toString(),
+        weightUnit: json['cargo_weight_unit'],
+        truckType: json['truck_type_required'],
+
+        // 🔥 FIX IMPORTANTE
+        requireHelpers: json['helpers_required'] == 1,
+        requireCrane: json['requires_crane'] == 1,
       );
+    } catch (e) {
+      print('❌ ERROR PARSEANDO ClientRequestResponse: $e');
+      print('❌ JSON PROBLEMATICO: $json');
+      rethrow;
+    }
+  }
 
   Map<String, dynamic> toJson() => {
         "id": id,
@@ -82,16 +162,20 @@ class ClientRequestResponse {
         "pickup_description": pickupDescription,
         "destination_description": destinationDescription,
         "updated_at": updatedAt.toIso8601String(),
+        "created_at": createdAt?.toIso8601String(),
         "pickup_lat": pickupPosition.lat,
         "pickup_lng": pickupPosition.lng,
         "destination_lat": destinationPosition.lat,
         "destination_lng": destinationPosition.lng,
         "distance": distance,
         "time_difference": timeDifference,
-        "client": client.toJson(),
+        "client": client!.toJson(),
         "google_distance_matrix": googleDistanceMatrix?.toJson(),
         "id_driver_assigned": idDriverAssigned,
         "fare_assigned": fareAssigned,
+        "client_rating": clientRating,
+        "driver_rating": driverRating,
+        "status": status,
         "driver": driver?.toJson(),
         "car": car?.toJson(),
       };
@@ -101,7 +185,7 @@ class Client {
   String name;
   dynamic image;
   String phone;
-  String lastname;
+  dynamic lastname;
 
   Client({
     required this.name,
@@ -112,7 +196,7 @@ class Client {
 
   factory Client.fromJson(Map<String, dynamic> json) => Client(
         name: json["name"] ?? "",
-        image: json["image"],
+        image: json["image"] ?? "",
         phone: json["phone"]?.toString() ?? "",
         lastname: json["lastname"] ?? "",
       );
@@ -150,7 +234,6 @@ class GoogleDistanceMatrix {
 
   factory GoogleDistanceMatrix.fromJson(Map<String, dynamic>? json) {
     if (json == null) {
-      // valores por defecto
       return GoogleDistanceMatrix(
         distance: Distance(text: "0 km", value: 0),
         duration: Distance(text: "0 min", value: 0),

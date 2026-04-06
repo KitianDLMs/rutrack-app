@@ -91,26 +91,26 @@ class ClientDriverOffersItem extends StatelessWidget {
   }
 
   Widget _imageUser() {
+    String? image = driverTripRequest?.driver?.image;
+
     return Container(
-        width: 60,
-        // margin: EdgeInsets.only(top: 25, bottom: 15),
-        child: AspectRatio(
-          aspectRatio: 1,
-          child: ClipOval(
-            child: driverTripRequest != null 
-            ? driverTripRequest!.driver!.image != null 
+      width: 60,
+      child: AspectRatio(
+        aspectRatio: 1,
+        child: ClipOval(
+          child: (image != null && image.isNotEmpty)
               ? FadeInImage.assetNetwork(
-                placeholder: 'assets/img/user_image.png', 
-                image: driverTripRequest!.driver!.image!,
-                fit: BoxFit.cover,
-                fadeInDuration: Duration(seconds: 1),
-              )
+                  placeholder: 'assets/img/user_image.png',
+                  image: image,
+                  fit: BoxFit.cover,
+                  fadeInDuration: Duration(seconds: 1),
+                )
               : Image.asset(
-                'assets/img/user_image.png',
-              )
-            : Container(),
-          ),
+                  'assets/img/user_image.png',
+                  fit: BoxFit.cover,
+                ),
         ),
-      );
+      ),
+    );
   }
 }
