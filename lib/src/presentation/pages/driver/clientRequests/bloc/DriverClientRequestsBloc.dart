@@ -1,10 +1,8 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:localdriver/blocSocketIO/BlocSocketIO.dart';
 import 'package:localdriver/src/domain/models/AuthResponse.dart';
-import 'package:localdriver/src/domain/models/ClientRequest.dart';
 import 'package:localdriver/src/domain/models/ClientRequestResponse.dart';
 import 'package:localdriver/src/domain/models/DriverPosition.dart';
-import 'package:localdriver/src/domain/models/DriverTripRequest.dart';
 import 'package:localdriver/src/domain/useCases/auth/AuthUseCases.dart';
 import 'package:localdriver/src/domain/useCases/client-requests/ClientRequestsUseCases.dart';
 import 'package:localdriver/src/domain/useCases/driver-trip-request/DriverTripRequestUseCases.dart';
@@ -12,7 +10,6 @@ import 'package:localdriver/src/domain/useCases/drivers-position/DriversPosition
 import 'package:localdriver/src/domain/utils/Resource.dart';
 import 'package:localdriver/src/presentation/pages/driver/clientRequests/bloc/DriverClientRequestsEvent.dart';
 import 'package:localdriver/src/presentation/pages/driver/clientRequests/bloc/DriverClientRequestsState.dart';
-import 'package:localdriver/src/presentation/utils/BlocFormItem.dart';
 
 class DriverClientRequestsBloc extends Bloc<DriverClientRequestsEvent, DriverClientRequestsState> {
 

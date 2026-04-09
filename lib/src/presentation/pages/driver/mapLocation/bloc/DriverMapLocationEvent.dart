@@ -1,5 +1,6 @@
 import 'package:geolocator/geolocator.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
+import 'package:localdriver/src/domain/models/ClientRequestResponse.dart' show ClientRequestResponse;
 import 'package:localdriver/src/domain/models/DriverPosition.dart';
 
 abstract class DriverMapLocationEvent {}
@@ -34,4 +35,14 @@ class SaveLocationData extends DriverMapLocationEvent {
 class DeleteLocationData extends DriverMapLocationEvent {
   final int idDriver;
   DeleteLocationData({ required this.idDriver });
+}
+
+class NewClientRequestEvent extends DriverMapLocationEvent {
+  final ClientRequestResponse request;
+  NewClientRequestEvent(this.request);
+}
+
+class RemoveClientRequestEvent extends DriverMapLocationEvent {
+  final ClientRequestResponse request;
+  RemoveClientRequestEvent(this.request);
 }

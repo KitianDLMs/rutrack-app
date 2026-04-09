@@ -11,6 +11,7 @@ class DefaultTextField extends StatelessWidget {
   Color backgroundColor;
   TextInputType keyboardType;
   bool obscureText;
+  bool readOnly;
 
   DefaultTextField({
     required this.text,
@@ -21,7 +22,8 @@ class DefaultTextField extends StatelessWidget {
     this.backgroundColor = Colors.white,
     this.initialValue,
     this.keyboardType = TextInputType.text,
-    this.obscureText = false
+    this.obscureText = false,
+    this.readOnly = false
   });
 
   @override
@@ -30,19 +32,22 @@ class DefaultTextField extends StatelessWidget {
       height: 50,
       margin: margin,
       decoration: BoxDecoration(
-        color: backgroundColor,
+        color: backgroundColor,              
         borderRadius: BorderRadius.only(
           topLeft: Radius.circular(15),
           bottomRight: Radius.circular(15),
         )
       ),
-      child: TextFormField(
+      child: TextFormField(                
         onChanged: (text) {
-          onChanged(text);
-        },
+          onChanged(text);          
+        },      
+        readOnly: readOnly,
+        enabled: !readOnly,
         obscureText: obscureText,
         style: TextStyle(
-          fontSize: 17
+          fontSize: 17,
+          color: Colors.black
         ),
         initialValue: initialValue,
         validator: validator,
@@ -51,7 +56,8 @@ class DefaultTextField extends StatelessWidget {
           label: Text(
             text,
             style: TextStyle(
-              fontSize: 13
+              fontSize: 13,
+              color: Colors.black
             ),
           ),
           border: InputBorder.none,

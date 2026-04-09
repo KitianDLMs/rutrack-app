@@ -4,6 +4,7 @@ import 'package:geolocator/geolocator.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:localdriver/blocSocketIO/BlocSocketIO.dart';
 import 'package:localdriver/src/domain/models/AuthResponse.dart';
+import 'package:localdriver/src/domain/models/ClientRequestResponse.dart' show ClientRequestResponse;
 import 'package:localdriver/src/domain/models/DriverPosition.dart';
 import 'package:localdriver/src/domain/useCases/auth/AuthUseCases.dart';
 import 'package:localdriver/src/domain/useCases/drivers-position/DriversPositionUseCases.dart';
@@ -121,6 +122,32 @@ class DriverMapLocationBloc extends Bloc<DriverMapLocationEvent, DriverMapLocati
       await driversPositionUseCases.deleteDriverPosition.run(event.idDriver);
     });
 
+
+    on<NewClientRequestEvent>((event, emit) {
+      final currentList = List<ClientRequestResponse>.from(state.pendingList);
+
+      currentList.add(event.request);
+
+      emit(
+        state.copyWith(
+          pendingList: currentList,
+          pendingRequests: currentList.length,
+        )
+      );
+    });
+
+    on<RemoveClientRequestEvent>((event, emit) {
+      final currentList = List<ClientRequestResponse>.from(state.pendingList);
+
+      currentList.remove(event.request);
+
+      emit(
+        state.copyWith(
+          pendingList: currentList,
+          pendingRequests: currentList.length,
+        )
+      );
+    });
   }
 
 

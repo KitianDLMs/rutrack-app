@@ -1,15 +1,18 @@
 import 'dart:async';
 
 import 'package:flutter/material.dart';
-import 'package:flutter/scheduler.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:localdriver/blocSocketIO/BlocSocketIO.dart';
 import 'package:localdriver/blocSocketIO/BlocSocketIOEvent.dart';
+import 'package:localdriver/src/domain/models/ClientRequestResponse.dart';
+import 'package:localdriver/src/domain/utils/Resource.dart';
+import 'package:localdriver/src/presentation/pages/driver/clientRequests/DriverClientRequestsPage.dart';
+import 'package:localdriver/src/presentation/pages/driver/clientRequests/bloc/DriverClientRequestsBloc.dart';
+import 'package:localdriver/src/presentation/pages/driver/clientRequests/bloc/DriverClientRequestsEvent.dart';
 import 'package:localdriver/src/presentation/pages/driver/mapLocation/bloc/DriverMapLocationEvent.dart';
 import 'package:localdriver/src/presentation/pages/driver/mapLocation/bloc/DriverMapLocationBloc.dart';
 import 'package:localdriver/src/presentation/pages/driver/mapLocation/bloc/DriverMapLocationState.dart';
-import 'package:localdriver/src/presentation/widgets/DefaultButton.dart';
 import 'package:toggle_switch/toggle_switch.dart';
 
 class DriverMapLocationPage extends StatefulWidget {
@@ -27,11 +30,15 @@ class _DriverMapLocationPageState extends State<DriverMapLocationPage> {
     WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
       context.read<DriverMapLocationBloc>().add(DriverMapLocationInitEvent());
       context.read<DriverMapLocationBloc>().add(FindPosition());
+      context.read<DriverClientRequestsBloc>().add(InitDriverClientRequest());
+      context.read<DriverClientRequestsBloc>().add(ListenNewClientRequestSocketIO());    
     });
   }
 
   @override
   Widget build(BuildContext context) {
+
+    
     return Scaffold(
       body: BlocListener<DriverMapLocationBloc, DriverMapLocationState>(
         listener: (context, state) async {
@@ -44,7 +51,28 @@ class _DriverMapLocationPageState extends State<DriverMapLocationPage> {
           }
         },
         child: BlocBuilder<DriverMapLocationBloc, DriverMapLocationState>(
-          builder: (context, state) {
+          builder: (context, state) {          
+            final requestState = context.watch<DriverClientRequestsBloc>().state;
+             int total = 0;
+
+            // if (requestState.response is Success) {
+            //   print('requestState.response ${requestState.response}');
+            //   // total = (requestState.response.data as List).length;
+            // }
+
+            if (requestState.response is Success<List<ClientRequestResponse>>) {
+              final data = (requestState.response as Success<List<ClientRequestResponse>>).data;
+              for (var item in data) {
+                print('REQUEST: ${item.toJson()}');
+              }
+              print('LISTA: $data');
+              print('TOTAL: ${data.length}');
+
+              total = data.length;
+            }
+
+            print('TOTAL REQUESTS $total');
+            print('pendingRequests ${state.pendingRequests}');
             return Stack(
               alignment: Alignment.topCenter,
               children: [
@@ -63,16 +91,70 @@ class _DriverMapLocationPageState extends State<DriverMapLocationPage> {
                       context.read<DriverMapLocationBloc>().add(FindPosition());
                     });
                   },
-                ),
+                ),                
+                  Positioned(
+                    top: 60,
+                    right: 20,
+                    child: GestureDetector(
+                      onTap: () {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) => DriverClientRequestsPage(),
+                          ),
+                        );
+                      },
+                      child: Stack(
+                        children: [
+                          Container(
+                            padding: EdgeInsets.all(12),
+                            decoration: BoxDecoration(
+                              color: Colors.white,
+                              shape: BoxShape.circle,
+                              boxShadow: [
+                                BoxShadow(color: Colors.black26, blurRadius: 5)
+                              ],
+                            ),
+                            child:
+                                Icon(Icons.notifications, color: Colors.black),
+                          ),                          
+                          Positioned(
+                            right: 0,
+                            top: 0,
+                            child: Container(
+                              padding: EdgeInsets.all(4),
+                              decoration: BoxDecoration(
+                                color: Colors.red,
+                                shape: BoxShape.circle,
+                              ),
+                              constraints: BoxConstraints(
+                                minWidth: 20,
+                                minHeight: 20,
+                              ),
+                              child: Text(
+                                '$total',
+                                style: TextStyle(
+                                  color: Colors.white,
+                                  fontSize: 12,
+                                  fontWeight: FontWeight.bold,
+                                ),
+                                textAlign: TextAlign.center,
+                              ),
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                  ),
                 Container(
                   alignment: Alignment.bottomCenter,
                   margin: EdgeInsets.only(bottom: 30),
                   child: ToggleSwitch(
-                    minWidth: 130.0,
+                    minWidth: 150.0,
                     minHeight: 50,
                     cornerRadius: 20.0,
                     activeBgColors: [
-                      [Colors.yellow],
+                      [Colors.lightGreenAccent],
                       [Colors.red]
                     ],
                     activeFgColor: Colors.white,
@@ -87,17 +169,15 @@ class _DriverMapLocationPageState extends State<DriverMapLocationPage> {
                           fontWeight: FontWeight.bold,
                           fontStyle: FontStyle.italic)
                     ],
-                    labels: ['Conectado', 'Desconectado'],
+                    labels: ['DISPONIBLE', 'DESCONECTADO'],
                     radiusStyle: true,
                     onToggle: (index) {
                       if (index == 0) {
-                        //CONECTADO
                         context.read<BlocSocketIO>().add(ConnectSocketIO());
                         context
                             .read<DriverMapLocationBloc>()
                             .add(FindPosition());
                       } else if (index == 1) {
-                        // DESCONECTADO
                         context.read<BlocSocketIO>().add(DisconnectSocketIO());
                         context
                             .read<DriverMapLocationBloc>()

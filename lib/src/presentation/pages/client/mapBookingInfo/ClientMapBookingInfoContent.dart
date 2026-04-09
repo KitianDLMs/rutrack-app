@@ -54,6 +54,13 @@ class ClientMapBookingInfoContent extends StatelessWidget {
       child: SingleChildScrollView(
         child: Column(
           children: [
+            Padding(
+              padding: EdgeInsets.symmetric(vertical: 5),
+              child: Text(
+                'DETALLES DE LA CARGA',
+                style: TextStyle(fontWeight: FontWeight.bold, fontSize: 30),
+              ),
+            ),
             ListTile(
               title: Text(
                 'Recoger en',
@@ -98,7 +105,7 @@ class ClientMapBookingInfoContent extends StatelessWidget {
                 ),
               ),
               leading: Icon(Icons.timer),
-            ),
+            ),  
             ListTile(
               title: Text(
                 'Precios recomendados',
@@ -113,7 +120,7 @@ class ClientMapBookingInfoContent extends StatelessWidget {
                 ),
               ),
               leading: Icon(Icons.money),
-            ),
+            ),         
             DefaultTextField(
               margin: EdgeInsets.only(left: 15, right: 15),
               text: 'OFRECE TU TARIFA', 
@@ -126,55 +133,21 @@ class ClientMapBookingInfoContent extends StatelessWidget {
                 return state.fareOffered.error;
               },
             ),
-            Divider(),
-            Padding(
-              padding: EdgeInsets.symmetric(vertical: 5),
-              child: Text(
-                'DETALLES DE LA CARGA',
-                style: TextStyle(fontWeight: FontWeight.bold),
-              ),
-            ),
-        
-            // PESO
+            Divider(),                         
             DefaultTextField(
               margin: EdgeInsets.only(left: 15, right: 15),
-              text: 'PESO DE LA CARGA',
-              icon: Icons.scale,
-              keyboardType: TextInputType.number,
+              text: 'DESCRIPCIÓN DE LA CARGA',
+              icon: Icons.description,
+              keyboardType: TextInputType.text,
               onChanged: (text) {
                 context.read<ClientMapBookingInfoBloc>().add(
-                  CargoWeightChanged(
-                    cargoWeight: BlocFormItem(value: text)
-                  )
+                  CargoTypeChanged(type: text)
                 );
               },
-              validator: (value) {
-                return state.cargoWeight.error;
-              },
             ),
-        
-            DropdownButtonFormField(
-              value: state.cargoWeightUnit,
-              items: ['KG', 'TON']
-                  .map((unit) => DropdownMenuItem(
-                        value: unit,
-                        child: Text(unit),
-                      ))
-                  .toList(),
-              onChanged: (value) {
-                context.read<ClientMapBookingInfoBloc>().add(
-                  CargoWeightUnitChanged(unit: value.toString())
-                );
-              },
-              decoration: InputDecoration(
-                labelText: 'Unidad de peso',
-                prefixIcon: Icon(Icons.straighten),
-              ),
-            ),
-        
             DropdownButtonFormField(
               value: state.truckTypeRequired,
-              items: ['Camioneta', '3/4', 'Camión', 'Camión grande']
+              items: ['Camioneta', '3/4', 'Camión', 'Camión grande']              
                   .map((type) => DropdownMenuItem(
                         value: type,
                         child: Text(type),
@@ -189,69 +162,42 @@ class ClientMapBookingInfoContent extends StatelessWidget {
                 labelText: 'Tipo de camión requerido',
                 prefixIcon: Icon(Icons.local_shipping),
               ),
-            ),
-        
-            DropdownButtonFormField(
-              value: state.cargoType,
-              items: [
-                'General',
-                'Pallets',
-                'Material de construcción',
-                'Mudanza',
-                'Maquinaria',
-                'Frágil'
-              ]
-                  .map((type) => DropdownMenuItem(
-                        value: type,
-                        child: Text(type),
-                      ))
-                  .toList(),
-              onChanged: (value) {
-                context.read<ClientMapBookingInfoBloc>().add(
-                  CargoTypeChanged(type: value.toString())
-                );
-              },
-              decoration: InputDecoration(
-                labelText: 'Tipo de carga',
-                prefixIcon: Icon(Icons.inventory),
-              ),
-            ),
-        
+            ),   
             // AYUDANTES
-            SwitchListTile(
-              title: Text('Necesita ayudantes'),
-              value: state.helpersRequired,
-              onChanged: (value) {
-                context.read<ClientMapBookingInfoBloc>().add(
-                  HelpersRequiredChanged(value: value)
-                );
-              },
-            ),
+            // SwitchListTile(
+            //   title: Text('Necesita ayudantes'),
+            //   value: state.helpersRequired,
+            //   onChanged: (value) {
+            //     context.read<ClientMapBookingInfoBloc>().add(
+            //       HelpersRequiredChanged(value: value)
+            //     );
+            //   },
+            // ),
         
-            SwitchListTile(
-              title: Text('Necesita grúa'),
-              value: state.requiresCrane,
-              onChanged: (value) {
-                context.read<ClientMapBookingInfoBloc>().add(
-                  RequiresCraneChanged(value: value)
-                );
-              },
-            ),
+            // SwitchListTile(
+            //   title: Text('Necesita grúa'),
+            //   value: state.requiresCrane,
+            //   onChanged: (value) {
+            //     context.read<ClientMapBookingInfoBloc>().add(
+            //       RequiresCraneChanged(value: value)
+            //     );
+            //   },
+            // ),
         
-            SwitchListTile(
-              title: Text('Carga frágil'),
-              value: state.fragileCargo,
-              onChanged: (value) {
-                context.read<ClientMapBookingInfoBloc>().add(
-                  FragileCargoChanged(value: value)
-                );
-              },
-            ),
+            // SwitchListTile(
+            //   title: Text('Carga frágil'),
+            //   value: state.fragileCargo,
+            //   onChanged: (value) {
+            //     context.read<ClientMapBookingInfoBloc>().add(
+            //       FragileCargoChanged(value: value)
+            //     );
+            //   },
+            // ),
             _actionProfile(
-              'BUSCAR CONDUCTOR',
+              'PUBLICAR CARGA',
               Icons.search,
               () {
-                print('CLICK BUSCAR CONDUCTOR');
+                print('CLICK Publicar Carga');
                 context.read<ClientMapBookingInfoBloc>().add(CreateClientRequest());
               }
             )

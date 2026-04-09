@@ -159,7 +159,7 @@ class ClientRequestsService {
       Uri url = Uri.https(ApiConfig.API_PROJECT, '/client-requests/${driverLat}/${driverLng}');
       Map<String, String> headers = { 'Content-Type': 'application/json' };
       final response = await http.get(url, headers: headers);
-      final data = json.decode(response.body);
+      final data = json.decode(response.body);      
       if (response.statusCode == 200 || response.statusCode == 201) {
         List<ClientRequestResponse> clientRequests =
             ClientRequestResponse.fromJsonList(data);

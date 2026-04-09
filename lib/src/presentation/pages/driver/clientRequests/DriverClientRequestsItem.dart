@@ -7,7 +7,6 @@ import 'package:localdriver/src/presentation/pages/driver/clientRequests/bloc/Dr
 import 'package:localdriver/src/presentation/pages/driver/clientRequests/bloc/DriverClientRequestsEvent.dart';
 import 'package:localdriver/src/presentation/pages/driver/clientRequests/bloc/DriverClientRequestsState.dart';
 import 'package:localdriver/src/presentation/utils/BlocFormItem.dart';
-import 'package:localdriver/src/presentation/utils/GalleryOrPhotoDialog.dart';
 import 'package:localdriver/src/presentation/widgets/DefaultTextField.dart';
 
 class DriverClientRequestsItem extends StatelessWidget {
@@ -128,11 +127,6 @@ class DriverClientRequestsItem extends StatelessWidget {
                         Row(
                           children: [
                             _infoItem(
-                              "Carga",
-                              "${clientRequest?.requiredWeight ?? '-'} ${clientRequest?.weightUnit ?? ''}",
-                              Icons.scale,
-                            ),
-                            _infoItem(
                               "Camión",
                               clientRequest?.truckType ?? '-',
                               Icons.local_shipping,
@@ -142,17 +136,10 @@ class DriverClientRequestsItem extends StatelessWidget {
                         Row(
                           children: [
                             _infoItem(
-                              "Ayudantes",
-                              clientRequest?.requireHelpers == true
-                                  ? 'Sí'
-                                  : 'No',
+                              "Descripcion",
+                              '${clientRequest?.cargoType ?? '-'}',
                               Icons.people,
-                            ),
-                            _infoItem(
-                              "Grúa",
-                              clientRequest?.requireCrane == true ? 'Sí' : 'No',
-                              Icons.construction,
-                            ),
+                            )
                           ],
                         ),
                       ],
@@ -220,72 +207,6 @@ class DriverClientRequestsItem extends StatelessWidget {
     );
   }
 
-  Widget _textMinutes() {
-    return Row(
-      children: [
-        Container(
-          width: 140,
-          child: Text(
-            'Tiempo de llegada: ',
-            style: TextStyle(
-                color: const Color.fromARGB(255, 112, 106, 106),
-                fontWeight: FontWeight.bold),
-          ),
-        ),
-        Flexible(
-            child: Text(
-                clientRequest?.googleDistanceMatrix?.duration?.text ?? '')),
-      ],
-    );
-  }
-
-  Widget _textDistance() {
-    return Row(
-      children: [
-        Container(
-          width: 140,
-          child: Text(
-            'Recorrido: ',
-            style: TextStyle(color: Colors.black, fontWeight: FontWeight.bold),
-          ),
-        ),
-        Flexible(
-            child: Text(
-                clientRequest?.googleDistanceMatrix?.distance!.text ?? '')),
-      ],
-    );
-  }
-
-  Widget _textPickup() {
-    return Row(
-      children: [
-        Container(
-          width: 90,
-          child: Text(
-            'Recoger en: ',
-            style: TextStyle(color: Colors.black, fontWeight: FontWeight.bold),
-          ),
-        ),
-        Flexible(child: Text(clientRequest?.pickupDescription ?? '')),
-      ],
-    );
-  }
-
-  Widget _textDestination() {
-    return Row(
-      children: [
-        Container(
-          width: 90,
-          child: Text(
-            'Llevar a: ',
-            style: TextStyle(color: Colors.black, fontWeight: FontWeight.bold),
-          ),
-        ),
-        Flexible(child: Text(clientRequest?.destinationDescription ?? '')),
-      ],
-    );
-  }
-
   Widget _imageUser() {
     final imageUrl = clientRequest?.client?.image;
 
@@ -323,8 +244,7 @@ class DriverClientRequestsItem extends StatelessWidget {
                   text: 'Valor',
                   icon: Icons.attach_money,
                   keyboardType: TextInputType.phone,
-                  onChanged: (text) {
-                    print('Tarifa del viaje: ${text}');
+                  onChanged: (text) {                    
                     context.read<DriverClientRequestsBloc>().add(
                         FareOfferedChange(
                             fareOffered: BlocFormItem(value: text)));

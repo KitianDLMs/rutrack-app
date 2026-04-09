@@ -7,7 +7,7 @@ import 'package:localdriver/src/domain/models/TimeAndDistanceValues.dart';
 import 'package:localdriver/src/presentation/pages/driver/mapTrip/bloc/DriverMapTripBloc.dart';
 import 'package:localdriver/src/presentation/pages/driver/mapTrip/bloc/DriverMapTripState.dart';
 import 'package:localdriver/src/presentation/pages/driver/mapTrip/bloc/DriverMapTripEvent.dart';
-import 'package:localdriver/src/presentation/widgets/DefaultImageUrl.dart';
+import 'package:flutter/services.dart';
 
 class DriverMapTripContent extends StatelessWidget {
   DriverMapTripState state;
@@ -51,44 +51,47 @@ class DriverMapTripContent extends StatelessWidget {
         child: Column(
           children: [
             SizedBox(height: 10),
-
-            // 🔥 CLIENTE
             Text(
-              'CLIENTE',
+              'DETALLES DEL VIAJE',
               style: TextStyle(
-                fontSize: 14,
-                color: Colors.grey,
-                fontWeight: FontWeight.bold,
+                fontSize: 25,
+                color: Colors.black,
+                fontWeight: FontWeight.w600,
               ),
             ),
-
             Row(
               children: [
                 _infoItem(
                   "Nombre",
-                  "${clientRequest?.client?.name ?? ''}",
+                  clientRequest?.client?.name ?? '',
                   Icons.person,
                 ),
                 _infoItem(
                   "Teléfono",
-                  "${clientRequest?.client?.phone ?? ''}",
+                  clientRequest?.client?.phone ?? '',
                   Icons.phone,
+                  onTap: () {
+                    final phone = clientRequest?.client?.phone ?? '';
+                    Clipboard.setData(ClipboardData(text: phone));
+
+                    ScaffoldMessenger.of(context).showSnackBar(
+                      SnackBar(
+                        content: Text("Número copiado"),
+                      ),
+                    );
+                  },
                 ),
               ],
             ),
-
-            // 🔥 VIAJE
             SizedBox(height: 5),
-
             Text(
               'VIAJE',
               style: TextStyle(
-                fontSize: 14,
-                color: Colors.grey,
-                fontWeight: FontWeight.bold,
+                fontSize: 25,
+                color: Colors.black,
+                fontWeight: FontWeight.w600,
               ),
             ),
-
             Row(
               children: [
                 _infoItem(
@@ -103,31 +106,8 @@ class DriverMapTripContent extends StatelessWidget {
                 ),
               ],
             ),
-
-            // 🔥 TIEMPO + DISTANCIA
             Row(
               children: [
-                _infoItem(
-                  "Tiempo",
-                  timeAndDistanceValues?.duration?.text ?? '',
-                  Icons.access_time,
-                ),
-                _infoItem(
-                  "Distancia",
-                  timeAndDistanceValues?.distance?.text ?? '',
-                  Icons.route,
-                ),
-              ],
-            ),
-
-            // 🔥 CARGA
-            Row(
-              children: [
-                _infoItem(
-                  "Carga",
-                  "${clientRequest?.requiredWeight ?? '-'} ${clientRequest?.weightUnit ?? ''}",
-                  Icons.scale,
-                ),
                 _infoItem(
                   "Camión",
                   clientRequest?.truckType ?? '-',
@@ -135,24 +115,15 @@ class DriverMapTripContent extends StatelessWidget {
                 ),
               ],
             ),
-
-            // 🔥 EXTRAS
             Row(
               children: [
                 _infoItem(
-                  "Ayudantes",
-                  clientRequest?.requireHelpers == true ? 'Sí' : 'No',
-                  Icons.people,
-                ),
-                _infoItem(
-                  "Grúa",
-                  clientRequest?.requireCrane == true ? 'Sí' : 'No',
-                  Icons.construction,
+                  "Descripción",
+                  clientRequest?.cargoType ?? '-',
+                  Icons.description_rounded,
                 ),
               ],
             ),
-
-            // 🔥 PRECIO DESTACADO
             Container(
               width: double.infinity,
               margin: EdgeInsets.all(6),
@@ -166,13 +137,11 @@ class DriverMapTripContent extends StatelessWidget {
                 textAlign: TextAlign.center,
                 style: TextStyle(
                   color: Colors.white,
-                  fontSize: 22, // 🔥 más grande
+                  fontSize: 22,
                   fontWeight: FontWeight.bold,
                 ),
               ),
             ),
-
-            // 🔥 BOTÓN ACCIÓN (MUY IMPORTANTE)
             state.statusTrip == StatusTrip.ARRIVED
                 ? _actionButton(
                     'FINALIZAR VIAJE',
@@ -194,7 +163,6 @@ class DriverMapTripContent extends StatelessWidget {
                           );
                     },
                   ),
-
             SizedBox(height: 15),
           ],
         ),
@@ -202,36 +170,44 @@ class DriverMapTripContent extends StatelessWidget {
     );
   }
 
-  Widget _infoItem(String title, String value, IconData icon) {
+  Widget _infoItem(
+    String title,
+    String value,
+    IconData icon, {
+    VoidCallback? onTap,
+  }) {
     return Expanded(
-      child: Container(
-        margin: EdgeInsets.all(4),
-        padding: EdgeInsets.all(10),
-        decoration: BoxDecoration(
-          color: Colors.white,
-          borderRadius: BorderRadius.circular(12),
-          boxShadow: [BoxShadow(color: Colors.black12, blurRadius: 4)],
-        ),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Icon(icon, size: 18, color: Colors.blueAccent),
-            SizedBox(height: 4),
-            Text(
-              title,
-              style: TextStyle(fontSize: 11, color: Colors.grey),
-            ),
-            SizedBox(height: 3),
-            Text(
-              value,
-              maxLines: 2,
-              overflow: TextOverflow.ellipsis,
-              style: TextStyle(
-                fontWeight: FontWeight.bold,
-                fontSize: 13, // 🔥 más legible
+      child: GestureDetector(
+        onTap: onTap,
+        child: Container(
+          margin: EdgeInsets.all(4),
+          padding: EdgeInsets.all(10),
+          decoration: BoxDecoration(
+            color: Colors.white,
+            borderRadius: BorderRadius.circular(12),
+            boxShadow: [BoxShadow(color: Colors.black12, blurRadius: 4)],
+          ),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Icon(icon, size: 18, color: Colors.blueAccent),
+              SizedBox(height: 4),
+              Text(
+                title,
+                style: TextStyle(fontSize: 11, color: Colors.grey),
               ),
-            ),
-          ],
+              SizedBox(height: 3),
+              Text(
+                value,
+                maxLines: 2,
+                overflow: TextOverflow.ellipsis,
+                style: TextStyle(
+                  fontWeight: FontWeight.bold,
+                  fontSize: 13,
+                ),
+              ),
+            ],
+          ),
         ),
       ),
     );

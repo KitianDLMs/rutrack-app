@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:localdriver/src/domain/models/ClientRequestResponse.dart';
@@ -48,35 +49,42 @@ class ClientMapTripContent extends StatelessWidget {
               Padding(
                 padding: const EdgeInsets.all(8.0),
                 child: Text(
-                  'Datos del viaje', style: 
-                  TextStyle(
-                    color: Colors.black, 
-                    fontSize: 25, 
+                  'DATOS DEL VIAJE',
+                  style: TextStyle(
+                    color: Colors.black,
+                    fontSize: 25,
                     fontFamily: 'Poppins',
                     fontWeight: FontWeight.w600,
-                  ),),
+                  ),
+                ),
               ),
               Row(
                 children: [
                   _infoItem(
                     "Conductor",
-                    "${clientRequest?.driver?.name ?? ''}",
+                    clientRequest?.driver?.name ?? '',
                     Icons.person,
                   ),
                   _infoItem(
                     "Teléfono",
-                    "${clientRequest?.driver?.phone ?? ''}",
+                    clientRequest?.client?.phone ?? '',
                     Icons.phone,
+                    onTap: () {
+                      final phone = clientRequest?.client?.phone ?? '';
+                      Clipboard.setData(ClipboardData(text: phone));
+                      ScaffoldMessenger.of(context).showSnackBar(
+                        SnackBar(
+                          content: Text("Número copiado"),
+                        ),
+                      );
+                    },
                   ),
                 ],
               ),
-              Row(                              
+              Row(
                 children: [
                   _infoItem(
-                    "Estado",
-                    "${clientRequest?.status ?? ''}",
-                    Icons.info
-                  )         
+                      "Estado", "${clientRequest?.status ?? ''}", Icons.info)
                 ],
               ),
               Row(
@@ -93,8 +101,6 @@ class ClientMapTripContent extends StatelessWidget {
                   ),
                 ],
               ),
-
-              // ORIGEN + DESTINO
               Row(
                 children: [
                   _infoItem(
@@ -109,15 +115,8 @@ class ClientMapTripContent extends StatelessWidget {
                   ),
                 ],
               ),
-
-              // CARGA + TIPO CAMIÓN
               Row(
                 children: [
-                  _infoItem(
-                    "Carga",
-                    "${clientRequest?.requiredWeight ?? '-'} ${clientRequest?.weightUnit ?? ''}",
-                    Icons.scale,
-                  ),
                   _infoItem(
                     "Camión",
                     clientRequest?.truckType ?? '-',
@@ -125,24 +124,15 @@ class ClientMapTripContent extends StatelessWidget {
                   ),
                 ],
               ),
-
-              // AYUDANTES + GRÚA
               Row(
                 children: [
                   _infoItem(
-                    "Ayudantes",
-                    clientRequest?.requireHelpers == true ? 'Sí' : 'No',
-                    Icons.people,
-                  ),
-                  _infoItem(
-                    "Grúa",
-                    clientRequest?.requireCrane == true ? 'Sí' : 'No',
-                    Icons.construction,
+                    "Descripción",
+                    clientRequest?.cargoType ?? '-',
+                    Icons.description,
                   ),
                 ],
               ),
-
-              // PRECIO (full width)
               Container(
                 width: double.infinity,
                 margin: EdgeInsets.all(5),
@@ -166,36 +156,44 @@ class ClientMapTripContent extends StatelessWidget {
         ));
   }
 
-  Widget _infoItem(String title, String value, IconData icon, {Widget? trailing}) {
+  Widget _infoItem(
+    String title,
+    String value,
+    IconData icon, {
+    VoidCallback? onTap,
+  }) {
     return Expanded(
-      child: Container(
-        margin: EdgeInsets.all(5),
-        padding: EdgeInsets.all(12),
-        decoration: BoxDecoration(
-          color: Colors.white,
-          borderRadius: BorderRadius.circular(15),
-          boxShadow: [
-            BoxShadow(
-              color: Colors.black12,
-              blurRadius: 5,
-            )
-          ],
-        ),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                Icon(icon, size: 20, color: Colors.blueAccent),
-                if (trailing != null) trailing
-              ],
-            ),
-            SizedBox(height: 5),
-            Text(title, style: TextStyle(fontSize: 12, color: Colors.grey)),
-            SizedBox(height: 5),
-            Text(value, style: TextStyle(fontWeight: FontWeight.bold)),
-          ],
+      child: GestureDetector(
+        onTap: onTap,
+        child: Container(
+          margin: EdgeInsets.all(4),
+          padding: EdgeInsets.all(10),
+          decoration: BoxDecoration(
+            color: Colors.white,
+            borderRadius: BorderRadius.circular(12),
+            boxShadow: [BoxShadow(color: Colors.black12, blurRadius: 4)],
+          ),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Icon(icon, size: 18, color: Colors.blueAccent),
+              SizedBox(height: 4),
+              Text(
+                title,
+                style: TextStyle(fontSize: 11, color: Colors.grey),
+              ),
+              SizedBox(height: 3),
+              Text(
+                value,
+                maxLines: 2,
+                overflow: TextOverflow.ellipsis,
+                style: TextStyle(
+                  fontWeight: FontWeight.bold,
+                  fontSize: 13,
+                ),
+              ),
+            ],
+          ),
         ),
       ),
     );

@@ -5,7 +5,6 @@ List<ClientRequestResponse> clientRequestResponseFromJson(String str) {
   final List<dynamic> jsonData = json.decode(str);
   return ClientRequestResponse.fromJsonList(jsonData);
 }
-    
 
 String clientRequestResponseToJson(ClientRequestResponse data) =>
     json.encode(data.toJson());
@@ -36,34 +35,35 @@ class ClientRequestResponse {
   String? truckType;
   bool? requireHelpers;
   bool? requireCrane;
+  String? cargoType;
 
-  ClientRequestResponse({
-    required this.id,
-    required this.idClient,
-    required this.fareOffered,
-    required this.pickupDescription,
-    required this.destinationDescription,
-    required this.updatedAt,
-    this.createdAt,
-    required this.pickupPosition,
-    required this.destinationPosition,
-    this.distance,
-    this.timeDifference,
-    required this.client,
-    this.googleDistanceMatrix,
-    this.fareAssigned,
-    this.idDriverAssigned,
-    this.clientRating,
-    this.driverRating,
-    this.status,
-    this.driver,
-    this.car,
-    this.requiredWeight,
-    this.weightUnit,
-    this.truckType,
-    this.requireHelpers,
-    this.requireCrane,
-  });
+  ClientRequestResponse(
+      {required this.id,
+      required this.idClient,
+      required this.fareOffered,
+      required this.pickupDescription,
+      required this.destinationDescription,
+      required this.updatedAt,
+      this.createdAt,
+      required this.pickupPosition,
+      required this.destinationPosition,
+      this.distance,
+      this.timeDifference,
+      required this.client,
+      this.googleDistanceMatrix,
+      this.fareAssigned,
+      this.idDriverAssigned,
+      this.clientRating,
+      this.driverRating,
+      this.status,
+      this.driver,
+      this.car,
+      this.requiredWeight,
+      this.weightUnit,
+      this.truckType,
+      this.requireHelpers,
+      this.requireCrane,
+      this.cargoType});
 
   static List<ClientRequestResponse> fromJsonList(List<dynamic> jsonList) {
     List<ClientRequestResponse> list = [];
@@ -83,8 +83,12 @@ class ClientRequestResponse {
   factory ClientRequestResponse.fromJson(Map<String, dynamic> json) {
     try {
       return ClientRequestResponse(
-        id: json["id"] is int ? json["id"] : int.tryParse(json["id"].toString()) ?? 0,
-        idClient: json["id_client"],
+        id: json["id"] is int
+            ? json["id"]
+            : int.tryParse(json["id"].toString()) ?? 0,
+        idClient: json["id_client"] is int
+            ? json["id_client"]
+            : int.tryParse(json["id_client"].toString()) ?? 0,
         fareOffered: json["fare_offered"]?.toString() ?? "0",
         pickupDescription: json["pickup_description"] ?? "",
         destinationDescription: json["destination_description"] ?? "",
@@ -101,34 +105,30 @@ class ClientRequestResponse {
         destinationPosition: Position(
           lat: (json["destination_lat"] ?? 0).toDouble(),
           lng: (json["destination_lng"] ?? 0).toDouble(),
-        ),        
+        ),
         distance: json["distance"] != null
-          ? double.tryParse(json["distance"].toString()) ?? 0
-          : 0,
+            ? double.tryParse(json["distance"].toString()) ?? 0
+            : 0,
 
         timeDifference: json["time_difference"]?.toString(),
 
-        client: json["client"] != null
-            ? Client.fromJson(json["client"])
-            : null,
+        client: json["client"] != null ? Client.fromJson(json["client"]) : null,
 
-        driver: json["driver"] != null
-            ? Client.fromJson(json["driver"])
-            : null,
+        driver: json["driver"] != null ? Client.fromJson(json["driver"]) : null,
 
         idDriverAssigned: json["id_driver_assigned"],
 
         fareAssigned: json["fare_assigned"] != null
-          ? double.tryParse(json["fare_assigned"].toString())
-          : null,
-
-        clientRating: json["client_rating"] != null
-            ? (json["client_rating"]).toDouble()
+            ? double.tryParse(json["fare_assigned"].toString())
             : null,
 
         driverRating: json["driver_rating"] != null
-            ? (json["driver_rating"]).toDouble()
-            : null,
+        ? double.tryParse(json["driver_rating"].toString())
+          : null,
+
+      clientRating: json["client_rating"] != null
+          ? double.tryParse(json["client_rating"].toString())
+          : null,
 
         status: json["status"],
 
@@ -136,17 +136,15 @@ class ClientRequestResponse {
             ? GoogleDistanceMatrix.fromJson(json["google_distance_matrix"])
             : null,
 
-        car: json["car"] != null
-            ? DriverCarInfo.fromJson(json["car"])
-            : null,
+        car: json["car"] != null ? DriverCarInfo.fromJson(json["car"]) : null,
 
         requiredWeight: json['cargo_weight']?.toString(),
         weightUnit: json['cargo_weight_unit'],
         truckType: json['truck_type_required'],
 
-        // 🔥 FIX IMPORTANTE
         requireHelpers: json['helpers_required'] == 1,
         requireCrane: json['requires_crane'] == 1,
+        cargoType: json['cargo_type'],
       );
     } catch (e) {
       print('❌ ERROR PARSEANDO ClientRequestResponse: $e');
@@ -178,6 +176,7 @@ class ClientRequestResponse {
         "status": status,
         "driver": driver?.toJson(),
         "car": car?.toJson(),
+        "cargo_type": cargoType,
       };
 }
 
