@@ -31,6 +31,8 @@ class ClientMapBookingInfoState extends Equatable {
   final bool helpersRequired;
   final bool requiresCrane;
   final bool fragileCargo;
+  final String? paymentStatus;
+  final String? status;
 
   ClientMapBookingInfoState({
     this.position,
@@ -48,7 +50,6 @@ class ClientMapBookingInfoState extends Equatable {
     this.responseTimeAndDistance,
     this.responseClientRequest,
     this.fareOffered = const BlocFormItem(error: 'Ingresa la tarifa'),
-
     this.cargoWeight = const BlocFormItem(error: 'Ingresa el peso de la carga'),
     this.cargoWeightUnit = 'KG',
     this.truckTypeRequired = 'Camioneta',
@@ -56,6 +57,8 @@ class ClientMapBookingInfoState extends Equatable {
     this.helpersRequired = false,
     this.requiresCrane = false,
     this.fragileCargo = false,
+    this.paymentStatus,
+    this.status,
   });
 
   ClientMapBookingInfoState copyWith({
@@ -71,7 +74,6 @@ class ClientMapBookingInfoState extends Equatable {
     Resource? responseTimeAndDistance,
     Resource? responseClientRequest,
     BlocFormItem? fareOffered,
-
     BlocFormItem? cargoWeight,
     String? cargoWeightUnit,
     String? truckTypeRequired,
@@ -79,6 +81,8 @@ class ClientMapBookingInfoState extends Equatable {
     bool? helpersRequired,
     bool? requiresCrane,
     bool? fragileCargo,
+    String? paymentStatus,
+    String? status,
   }) {
     return ClientMapBookingInfoState(
       position: position ?? this.position,
@@ -95,7 +99,6 @@ class ClientMapBookingInfoState extends Equatable {
       responseClientRequest:
           responseClientRequest ?? this.responseClientRequest,
       fareOffered: fareOffered ?? this.fareOffered,
-
       cargoWeight: cargoWeight ?? this.cargoWeight,
       cargoWeightUnit: cargoWeightUnit ?? this.cargoWeightUnit,
       truckTypeRequired: truckTypeRequired ?? this.truckTypeRequired,
@@ -103,6 +106,8 @@ class ClientMapBookingInfoState extends Equatable {
       helpersRequired: helpersRequired ?? this.helpersRequired,
       requiresCrane: requiresCrane ?? this.requiresCrane,
       fragileCargo: fragileCargo ?? this.fragileCargo,
+      paymentStatus: paymentStatus ?? this.paymentStatus,
+      status: status ?? this.status,
     );
   }
 
@@ -127,5 +132,7 @@ class ClientMapBookingInfoState extends Equatable {
     helpersRequired,
     requiresCrane,
     fragileCargo,
+    paymentStatus,
+    status
   ];
 }

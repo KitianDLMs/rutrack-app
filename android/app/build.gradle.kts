@@ -33,8 +33,8 @@ android {
 
     defaultConfig {
         applicationId = "com.echnelapp.localdriver"
-        minSdk = 21
-        targetSdk = flutter.targetSdkVersion
+        minSdk = flutter.minSdkVersion
+        targetSdk = 35
         versionCode = flutter.versionCode
         versionName = flutter.versionName
     }

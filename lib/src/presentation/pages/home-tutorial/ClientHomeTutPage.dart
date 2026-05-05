@@ -28,7 +28,7 @@ class _ClientHomeTutPageState extends State<ClientHomeTutPage> {
   final PageController _pageController = PageController();
   int _currentPage = 0;
 
-  final Widget initialAppPage = ClientHomePage();  
+  final Widget initialAppPage = ClientHomePage();
 
   List<Widget> pageList = <Widget>[
     ClientMapSeekerPage(),
@@ -37,7 +37,8 @@ class _ClientHomeTutPageState extends State<ClientHomeTutPage> {
     RolesPage(),
   ];
 
-  final Uri _termsAndConditionsUrl = Uri.parse('https://rutrack-poli-terms.netlify.app');
+  final Uri _termsAndConditionsUrl =
+      Uri.parse('https://rutrack-poli-terms.netlify.app');
 
   Future<void> _launchTermsAndConditions() async {
     if (!await launchUrl(
@@ -93,7 +94,7 @@ class _ClientHomeTutPageState extends State<ClientHomeTutPage> {
             },
             children: [
               _buildFirstTutorialPage(
-                title: "Flete",
+                title: "Tropero",
                 description:
                     "(para solicitar tu conductor debes iniciar sesión)",
                 image: Icons.motorcycle,
@@ -189,15 +190,31 @@ class _ClientHomeTutPageState extends State<ClientHomeTutPage> {
                 ),
                 const SizedBox(height: 16),
                 GestureDetector(
-                  onTap: _launchTermsAndConditions,
-                  child: const Text(
-                    "Términos y Condiciones",
-                    style: TextStyle(
-                      fontSize: 14,
-                      color: Colors.white,
-                    ),
-                  ),
-                ),
+                    onTap: _launchTermsAndConditions,
+                    child: Column(
+                      children: [
+                        GestureDetector(
+                          onTap: _launchTermsAndConditions,
+                          child: const Text(
+                            "Términos y Condiciones",
+                            style: TextStyle(
+                              fontSize: 13,
+                              color: Colors.white70,
+                              decoration: TextDecoration.underline,
+                            ),
+                          ),
+                        ),
+                        const SizedBox(height: 4),
+                        Text(
+                          "© ${DateTime.now().year} Echnelapp",
+                          style: TextStyle(
+                            fontSize: 10,
+                            color: Colors.white38,
+                            letterSpacing: 1.5,
+                          ),
+                        ),
+                      ],
+                    )),
                 const SizedBox(height: 8),
               ],
             ),
@@ -253,77 +270,93 @@ class _ClientHomeTutPageState extends State<ClientHomeTutPage> {
                         height: 20,
                       ),
                       const SizedBox(width: 10),
-                      const Text(                      
+                      const Text(
                         " Iniciar sesión",
                         style: TextStyle(color: Colors.white, fontSize: 17),
                       ),
                     ],
                   ),
                 ),
-                SizedBox(height: 5,),
-                MaterialButton(
-                    splashColor: Colors.transparent,
-                    minWidth: double.infinity,
-                    height: 40,
-                    color: Colors.red,
-                    shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(8)),
-                    child: const Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        Icon(FontAwesomeIcons.google, color: Colors.white),
-                        Text(
-                          '  Iniciar con Google',
-                          style: TextStyle(color: Colors.white, fontSize: 17),
-                        )
-                      ],
-                    ),
-                    onPressed: () async {
-                      final authResponse = await GoogleSignInService.signInWithGoogle();
-                      if (authResponse != null) {
-                        context.read<LoginBloc>().add(
-                          UpdateNotificationToken(id: authResponse.user.id!),
-                        );
-                        context.read<LoginBloc>().add(
-                          SaveUserSession(authResponse: authResponse),
-                        );
-                        context.read<BlocSocketIO>().add(ConnectSocketIO());
-                        context.read<BlocSocketIO>().add(ListenDriverAssignedSocketIO());
-                        if (authResponse.user.roles!.length > 1) {
-                          Navigator.pushNamedAndRemoveUntil(context, 'roles', (route) => false);
-                        } else {
-                          Navigator.pushNamedAndRemoveUntil(context, 'client/home', (route) => false);
-                        }
-                      } else {
-                        print('No se pudo iniciar con Google');
-                      }
-                    },
+                SizedBox(
+                  height: 5,
                 ),
-                SizedBox(height: 5,),
+                MaterialButton(
+                  splashColor: Colors.transparent,
+                  minWidth: double.infinity,
+                  height: 40,
+                  color: Colors.red,
+                  shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(8)),
+                  child: const Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Icon(FontAwesomeIcons.google, color: Colors.white),
+                      Text(
+                        '  Iniciar con Google',
+                        style: TextStyle(color: Colors.white, fontSize: 17),
+                      )
+                    ],
+                  ),
+                  onPressed: () async {
+                    final authResponse =
+                        await GoogleSignInService.signInWithGoogle();
+                    if (authResponse != null) {
+                      context.read<LoginBloc>().add(
+                            UpdateNotificationToken(id: authResponse.user.id!),
+                          );
+                      context.read<LoginBloc>().add(
+                            SaveUserSession(authResponse: authResponse),
+                          );
+                      context.read<BlocSocketIO>().add(ConnectSocketIO());
+                      context
+                          .read<BlocSocketIO>()
+                          .add(ListenDriverAssignedSocketIO());
+                      if (authResponse.user.roles!.length > 1) {
+                        Navigator.pushNamedAndRemoveUntil(
+                            context, 'roles', (route) => false);
+                      } else {
+                        Navigator.pushNamedAndRemoveUntil(
+                            context, 'client/home', (route) => false);
+                      }
+                    } else {
+                      print('No se pudo iniciar con Google');
+                    }
+                  },
+                ),
+                SizedBox(
+                  height: 5,
+                ),
                 SignInWithAppleButton(
                   text: 'Iniciar con Apple',
                   onPressed: () async {
-                    final authResponse = await AppleSignInService.signInWithApple();
+                    final authResponse =
+                        await AppleSignInService.signInWithApple();
                     if (authResponse != null) {
                       context.read<LoginBloc>().add(
-                        UpdateNotificationToken(id: authResponse.user.id!),
-                      );
+                            UpdateNotificationToken(id: authResponse.user.id!),
+                          );
                       context.read<LoginBloc>().add(
-                        SaveUserSession(authResponse: authResponse),
-                      );
+                            SaveUserSession(authResponse: authResponse),
+                          );
                       context.read<BlocSocketIO>().add(ConnectSocketIO());
-                      context.read<BlocSocketIO>().add(ListenDriverAssignedSocketIO());
+                      context
+                          .read<BlocSocketIO>()
+                          .add(ListenDriverAssignedSocketIO());
                       if (authResponse.user.roles!.length > 1) {
-                        Navigator.pushNamedAndRemoveUntil(context, 'roles', (route) => false);
+                        Navigator.pushNamedAndRemoveUntil(
+                            context, 'roles', (route) => false);
                       } else {
-                        Navigator.pushNamedAndRemoveUntil(context, 'client/home', (route) => false);
+                        Navigator.pushNamedAndRemoveUntil(
+                            context, 'client/home', (route) => false);
                       }
                     } else {
                       print('Login Apple falló');
                     }
                   },
                 ),
-                SizedBox(height: 5,),
+                SizedBox(
+                  height: 5,
+                ),
                 MaterialButton(
                   splashColor: Colors.transparent,
                   minWidth: double.infinity,
@@ -408,118 +441,132 @@ class _ClientHomeTutPageState extends State<ClientHomeTutPage> {
             mainAxisAlignment: MainAxisAlignment.spaceEvenly,
             children: [
               MaterialButton(
-                  splashColor: Colors.transparent,
-                  minWidth: double.infinity,
-                  height: 40,
-                  color: Colors.blue,
-                  shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(8)),
-                  onPressed: _goToLogin,
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      Image.asset(
-                        'assets/img/180.png',
-                        height: 20,
-                      ),
-                      const SizedBox(width: 10),
-                      const Text(                      
-                        " Iniciar sesión",
-                        style: TextStyle(color: Colors.white, fontSize: 17),
-                      ),
-                    ],
-                  ),
-                ),
-                SizedBox(height: 5,),
-                MaterialButton(
-                    splashColor: Colors.transparent,
-                    minWidth: double.infinity,
-                    height: 40,
-                    color: Colors.red,
-                    shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(8)),
-                    child: const Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        Icon(FontAwesomeIcons.google, color: Colors.white),
-                        Text(
-                          '  Iniciar con Google',
-                          style: TextStyle(color: Colors.white, fontSize: 17),
-                        )
-                      ],
+                splashColor: Colors.transparent,
+                minWidth: double.infinity,
+                height: 40,
+                color: Colors.blue,
+                shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(8)),
+                onPressed: _goToLogin,
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Image.asset(
+                      'assets/img/180.png',
+                      height: 20,
                     ),
-                    onPressed: () async {
-                      final authResponse = await GoogleSignInService.signInWithGoogle();
-                      if (authResponse != null) {
-                        context.read<LoginBloc>().add(
+                    const SizedBox(width: 10),
+                    const Text(
+                      " Iniciar sesión",
+                      style: TextStyle(color: Colors.white, fontSize: 17),
+                    ),
+                  ],
+                ),
+              ),
+              SizedBox(
+                height: 5,
+              ),
+              MaterialButton(
+                splashColor: Colors.transparent,
+                minWidth: double.infinity,
+                height: 40,
+                color: Colors.red,
+                shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(8)),
+                child: const Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Icon(FontAwesomeIcons.google, color: Colors.white),
+                    Text(
+                      '  Iniciar con Google',
+                      style: TextStyle(color: Colors.white, fontSize: 17),
+                    )
+                  ],
+                ),
+                onPressed: () async {
+                  final authResponse =
+                      await GoogleSignInService.signInWithGoogle();
+                  if (authResponse != null) {
+                    context.read<LoginBloc>().add(
                           UpdateNotificationToken(id: authResponse.user.id!),
                         );
-                        context.read<LoginBloc>().add(
+                    context.read<LoginBloc>().add(
                           SaveUserSession(authResponse: authResponse),
                         );
-                        context.read<BlocSocketIO>().add(ConnectSocketIO());
-                        context.read<BlocSocketIO>().add(ListenDriverAssignedSocketIO());
-                        if (authResponse.user.roles!.length > 1) {
-                          Navigator.pushNamedAndRemoveUntil(context, 'roles', (route) => false);
-                        } else {
-                          Navigator.pushNamedAndRemoveUntil(context, 'client/home', (route) => false);
-                        }
-                      } else {
-                        print('No se pudo iniciar con Google');
-                      }
-                    },
-                  ),
-                SizedBox(height: 5,),
-                SignInWithAppleButton(
-                  text: 'Iniciar con Apple',
-                  onPressed: () async {
-                    final authResponse = await AppleSignInService.signInWithApple();
-                    print('authresponse $authResponse');
-                    if (authResponse != null) {
-
-                      context.read<LoginBloc>().add(
-                        UpdateNotificationToken(id: authResponse.user.id!),
-                      );
-
-                      context.read<LoginBloc>().add(
-                        SaveUserSession(authResponse: authResponse),
-                      );
-
-                      context.read<BlocSocketIO>().add(ConnectSocketIO());
-                      context.read<BlocSocketIO>().add(ListenDriverAssignedSocketIO());
-
-                      if (authResponse.user.roles!.length > 1) {
-                        Navigator.pushNamedAndRemoveUntil(context, 'roles', (route) => false);
-                      } else {
-                        Navigator.pushNamedAndRemoveUntil(context, 'client/home', (route) => false);
-                      }
-
+                    context.read<BlocSocketIO>().add(ConnectSocketIO());
+                    context
+                        .read<BlocSocketIO>()
+                        .add(ListenDriverAssignedSocketIO());
+                    if (authResponse.user.roles!.length > 1) {
+                      Navigator.pushNamedAndRemoveUntil(
+                          context, 'roles', (route) => false);
                     } else {
-                      print('Login Apple falló');
+                      Navigator.pushNamedAndRemoveUntil(
+                          context, 'client/home', (route) => false);
                     }
-                  },
+                  } else {
+                    print('No se pudo iniciar con Google');
+                  }
+                },
+              ),
+              SizedBox(
+                height: 5,
+              ),
+              SignInWithAppleButton(
+                text: 'Iniciar con Apple',
+                onPressed: () async {
+                  final authResponse =
+                      await AppleSignInService.signInWithApple();
+                  print('authresponse $authResponse');
+                  if (authResponse != null) {
+                    context.read<LoginBloc>().add(
+                          UpdateNotificationToken(id: authResponse.user.id!),
+                        );
+
+                    context.read<LoginBloc>().add(
+                          SaveUserSession(authResponse: authResponse),
+                        );
+
+                    context.read<BlocSocketIO>().add(ConnectSocketIO());
+                    context
+                        .read<BlocSocketIO>()
+                        .add(ListenDriverAssignedSocketIO());
+
+                    if (authResponse.user.roles!.length > 1) {
+                      Navigator.pushNamedAndRemoveUntil(
+                          context, 'roles', (route) => false);
+                    } else {
+                      Navigator.pushNamedAndRemoveUntil(
+                          context, 'client/home', (route) => false);
+                    }
+                  } else {
+                    print('Login Apple falló');
+                  }
+                },
+              ),
+              SizedBox(
+                height: 5,
+              ),
+              MaterialButton(
+                splashColor: Colors.transparent,
+                minWidth: double.infinity,
+                height: 40,
+                color: const Color.fromARGB(255, 240, 240, 240),
+                shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(8)),
+                onPressed: _skipTutorial,
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Icon(Icons.arrow_circle_up_rounded),
+                    SizedBox(width: 10),
+                    Text(
+                      "Omitir",
+                      style: TextStyle(color: Colors.black, fontSize: 17),
+                    ),
+                  ],
                 ),
-                SizedBox(height: 5,),
-                MaterialButton(
-                  splashColor: Colors.transparent,
-                  minWidth: double.infinity,
-                  height: 40,
-                  color: const Color.fromARGB(255, 240, 240, 240),
-                  shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(8)),
-                  onPressed: _skipTutorial,
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      Icon(Icons.arrow_circle_up_rounded),
-                      SizedBox(width: 10),
-                      Text(
-                        "Omitir",
-                        style: TextStyle(color: Colors.black, fontSize: 17),
-                      ),
-                    ],
-                  ),
-                ),
+              ),
             ],
           )
         ],

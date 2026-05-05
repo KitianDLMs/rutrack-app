@@ -14,6 +14,11 @@ import 'package:localdriver/src/presentation/pages/client/driverOffers/ClientDri
 import 'package:localdriver/src/presentation/pages/client/home/ClientHomePage.dart';
 import 'package:localdriver/src/presentation/pages/client/mapBookingInfo/ClientMapBookingInfoPage.dart';
 import 'package:localdriver/src/presentation/pages/client/mapTrip/ClientMapTripPage.dart';
+import 'package:localdriver/src/presentation/pages/client/mp/aprobado.dart';
+import 'package:localdriver/src/presentation/pages/client/mp/itempage.dart';
+import 'package:localdriver/src/presentation/pages/client/mp/pago_page.dart';
+import 'package:localdriver/src/presentation/pages/client/mp/pendiente.dart';
+import 'package:localdriver/src/presentation/pages/client/mp/rechazado.dart';
 import 'package:localdriver/src/presentation/pages/client/ratingTrip/ClientRatingTripPage.dart';
 import 'package:localdriver/src/presentation/pages/driver/clientRequests/DriverClientRequestsPage.dart';
 import 'package:localdriver/src/presentation/pages/driver/home/DriverHomePage.dart';
@@ -64,7 +69,7 @@ class _MyAppState extends State<MyApp> {
       providers: blocProviders,
       child: MaterialApp(
         builder: FToastBuilder(),
-        title: 'Flete',
+        title: 'Tropero Viajes',
         navigatorKey: navigatorKey,
         debugShowCheckedModeBanner: false,
         theme: ThemeData(
@@ -86,6 +91,11 @@ class _MyAppState extends State<MyApp> {
           'driver/rating/trip': (BuildContext context) => DriverRatingTripPage(),
           'driver/client/request': (BuildContext context) => DriverClientRequestsPage(),
           'client/rating/trip': (BuildContext context) => ClientRatingTripPage(),
+          'client/mp/aprobado': (BuildContext context) => AprobadoPage(),
+          'client/mp/rechazado': (BuildContext context) => RechazadoPage(),
+          'client/mp/pendiente': (BuildContext context) => PendientePage(),
+          'client/mp/item': (BuildContext context) => ItemPage(),
+          'client/mp/pago': (BuildContext context) => PagoPage(),
         },
         onGenerateRoute: (settings) {
           if (settings.name == 'client/driver/offers') {

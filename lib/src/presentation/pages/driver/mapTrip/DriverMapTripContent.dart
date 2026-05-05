@@ -51,14 +51,14 @@ class DriverMapTripContent extends StatelessWidget {
         child: Column(
           children: [
             SizedBox(height: 10),
-            Text(
-              'DETALLES DEL VIAJE',
-              style: TextStyle(
-                fontSize: 25,
-                color: Colors.black,
-                fontWeight: FontWeight.w600,
-              ),
-            ),
+            // Text(
+            //   'DETALLES DEL VIAJE',
+            //   style: TextStyle(
+            //     fontSize: 25,
+            //     color: Colors.black,
+            //     fontWeight: FontWeight.w600,
+            //   ),
+            // ),
             Row(
               children: [
                 _infoItem(
@@ -82,16 +82,7 @@ class DriverMapTripContent extends StatelessWidget {
                   },
                 ),
               ],
-            ),
-            SizedBox(height: 5),
-            Text(
-              'VIAJE',
-              style: TextStyle(
-                fontSize: 25,
-                color: Colors.black,
-                fontWeight: FontWeight.w600,
-              ),
-            ),
+            ),      
             Row(
               children: [
                 _infoItem(
@@ -109,18 +100,14 @@ class DriverMapTripContent extends StatelessWidget {
             Row(
               children: [
                 _infoItem(
-                  "Camión",
-                  clientRequest?.truckType ?? '-',
-                  Icons.local_shipping,
+                  "Status",
+                  clientRequest?.status ?? '',
+                  Icons.location_on,
                 ),
-              ],
-            ),
-            Row(
-              children: [
                 _infoItem(
-                  "Descripción",
-                  clientRequest?.cargoType ?? '-',
-                  Icons.description_rounded,
+                  "Pago",
+                  clientRequest?.paymentStatus ?? '',
+                  Icons.payment,
                 ),
               ],
             ),

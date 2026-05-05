@@ -36,6 +36,7 @@ class ClientRequestResponse {
   bool? requireHelpers;
   bool? requireCrane;
   String? cargoType;
+  String? paymentStatus;
 
   ClientRequestResponse(
       {required this.id,
@@ -63,7 +64,8 @@ class ClientRequestResponse {
       this.truckType,
       this.requireHelpers,
       this.requireCrane,
-      this.cargoType});
+      this.cargoType,
+      this.paymentStatus,});
 
   static List<ClientRequestResponse> fromJsonList(List<dynamic> jsonList) {
     List<ClientRequestResponse> list = [];
@@ -145,6 +147,7 @@ class ClientRequestResponse {
         requireHelpers: json['helpers_required'] == 1,
         requireCrane: json['requires_crane'] == 1,
         cargoType: json['cargo_type'],
+        paymentStatus: json["payment_status"],
       );
     } catch (e) {
       print('❌ ERROR PARSEANDO ClientRequestResponse: $e');
@@ -177,6 +180,7 @@ class ClientRequestResponse {
         "driver": driver?.toJson(),
         "car": car?.toJson(),
         "cargo_type": cargoType,
+        "payment_status": paymentStatus,
       };
 }
 

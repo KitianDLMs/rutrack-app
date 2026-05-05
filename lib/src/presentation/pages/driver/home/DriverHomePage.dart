@@ -35,7 +35,7 @@ class _DriverHomePageState extends State<DriverHomePage> {
     return Scaffold(
       appBar: AppBar(
         title: Text(
-          'Flete',
+          'Tropero',
         ),
       ),
       body: BlocBuilder<DriverHomeBloc, DriverHomeState>(

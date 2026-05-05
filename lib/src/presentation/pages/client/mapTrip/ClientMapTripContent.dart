@@ -1,12 +1,16 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
+import 'package:http/http.dart' as http;
 import 'package:localdriver/src/domain/models/ClientRequestResponse.dart';
 import 'package:localdriver/src/domain/models/TimeAndDistanceValues.dart';
 import 'package:localdriver/src/presentation/pages/client/mapTrip/bloc/ClientMapTripBloc.dart';
 import 'package:localdriver/src/presentation/pages/client/mapTrip/bloc/ClientMapTripEvent.dart';
 import 'package:localdriver/src/presentation/pages/client/mapTrip/bloc/ClientMapTripState.dart';
+import 'package:localdriver/src/presentation/pages/client/mp/pago_page.dart';
 import 'package:localdriver/src/presentation/widgets/DefaultImageUrl.dart';
 
 class ClientMapTripContent extends StatelessWidget {
@@ -46,18 +50,19 @@ class ClientMapTripContent extends StatelessWidget {
         child: SingleChildScrollView(
           child: Column(
             children: [
-              Padding(
-                padding: const EdgeInsets.all(8.0),
-                child: Text(
-                  'DATOS DEL VIAJE',
-                  style: TextStyle(
-                    color: Colors.black,
-                    fontSize: 25,
-                    fontFamily: 'Poppins',
-                    fontWeight: FontWeight.w600,
-                  ),
-                ),
-              ),
+              SizedBox(height: 10,),
+              // Padding(
+              //   padding: const EdgeInsets.all(8.0),
+              //   child: Text(
+              //     'DATOS DEL VIAJE',
+              //     style: TextStyle(
+              //       color: Colors.black,
+              //       fontSize: 25,
+              //       fontFamily: 'Poppins',
+              //       fontWeight: FontWeight.w600,
+              //     ),
+              //   ),
+              // ),
               Row(
                 children: [
                   _infoItem(
@@ -83,8 +88,12 @@ class ClientMapTripContent extends StatelessWidget {
               ),
               Row(
                 children: [
+                  _infoItem("Viaje", clientRequest?.status ?? '', Icons.info),
                   _infoItem(
-                      "Estado", "${clientRequest?.status ?? ''}", Icons.info)
+                    "Pago",
+                    clientRequest?.paymentStatus ?? '',
+                    Icons.payment,
+                  )
                 ],
               ),
               Row(
@@ -115,42 +124,57 @@ class ClientMapTripContent extends StatelessWidget {
                   ),
                 ],
               ),
-              Row(
-                children: [
-                  _infoItem(
-                    "Camión",
-                    clientRequest?.truckType ?? '-',
-                    Icons.fire_truck,
+              GestureDetector(
+                onTap: () async {
+                  try {
+                    final uri =
+                        // Uri.parse("http://192.168.0.116:3000/payments/create");
+                        Uri.parse("https://localdriver.onrender.com/payments/create");                        
+
+                    final response = await http.post(
+                      uri,
+                      headers: {
+                        "Content-Type": "application/json",
+                      },
+                      body: jsonEncode({
+                        "tripId": clientRequest?.id,
+                        "title":
+                            "Viaje ${clientRequest?.pickupDescription} → ${clientRequest?.destinationDescription}",
+                        "price": clientRequest?.fareAssigned,
+                      }),
+                    );
+                    final data = jsonDecode(response.body);
+                    final url = data['url'];
+                    if (context.mounted) {
+                      Navigator.pushReplacement(
+                          context,
+                          MaterialPageRoute(
+                              builder: (BuildContext context) =>
+                                  PagoPage(url: url)));
+                    }
+                  } catch (e) {
+                    print('error $e');
+                  }
+                },
+                child: Container(
+                  width: double.infinity,
+                  margin: EdgeInsets.all(5),
+                  padding: EdgeInsets.all(15),
+                  decoration: BoxDecoration(
+                    color: Colors.blueAccent,
+                    borderRadius: BorderRadius.circular(15),
                   ),
-                ],
-              ),
-              Row(
-                children: [
-                  _infoItem(
-                    "Descripción",
-                    clientRequest?.cargoType ?? '-',
-                    Icons.description,
+                  child: Text(
+                    "Pagar \$${clientRequest?.fareAssigned}",
+                    textAlign: TextAlign.center,
+                    style: TextStyle(
+                      color: Colors.white,
+                      fontSize: 20,
+                      fontWeight: FontWeight.bold,
+                    ),
                   ),
-                ],
-              ),
-              Container(
-                width: double.infinity,
-                margin: EdgeInsets.all(5),
-                padding: EdgeInsets.all(15),
-                decoration: BoxDecoration(
-                  color: Colors.blueAccent,
-                  borderRadius: BorderRadius.circular(15),
                 ),
-                child: Text(
-                  "\$${clientRequest?.fareAssigned}",
-                  textAlign: TextAlign.center,
-                  style: TextStyle(
-                    color: Colors.white,
-                    fontSize: 20,
-                    fontWeight: FontWeight.bold,
-                  ),
-                ),
-              ),
+              )
             ],
           ),
         ));

@@ -55,7 +55,7 @@ class _ClientHomePageState extends State<ClientHomePage> {
         surfaceTintColor: Colors.transparent,
         shadowColor: Colors.transparent,
         title: Text(
-          'Flete',
+          'Tropero',
           style: TextStyle(
               color:
                   Colors.white),
@@ -144,9 +144,8 @@ class _ClientHomePageState extends State<ClientHomePage> {
                       builder: (context) {
                         return AlertDialog(
                           title: Text('Cerrar sesión'),
-                          content: Text('¿Estás seguro que quieres salir de la app Flete?'),
+                          content: Text('¿Estás seguro que quieres salir de la app Tropero?'),
                           actions: [
-
                             TextButton(
                               onPressed: () {
                                 Navigator.pop(context);

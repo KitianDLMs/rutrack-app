@@ -53,14 +53,7 @@ class ClientMapBookingInfoContent extends StatelessWidget {
       ),
       child: SingleChildScrollView(
         child: Column(
-          children: [
-            Padding(
-              padding: EdgeInsets.symmetric(vertical: 5),
-              child: Text(
-                'DETALLES DE LA CARGA',
-                style: TextStyle(fontWeight: FontWeight.bold, fontSize: 30),
-              ),
-            ),
+          children: [   
             ListTile(
               title: Text(
                 'Recoger en',
@@ -99,7 +92,7 @@ class ClientMapBookingInfoContent extends StatelessWidget {
                 ),
               ),
               subtitle: Text(
-                '${timeAndDistanceValues.distance.text} y ${timeAndDistanceValues.duration.text}',
+                '${timeAndDistanceValues.duration.text} y ${timeAndDistanceValues.distance.text}',
                 style: TextStyle(
                   fontSize: 13
                 ),
@@ -134,35 +127,35 @@ class ClientMapBookingInfoContent extends StatelessWidget {
               },
             ),
             Divider(),                         
-            DefaultTextField(
-              margin: EdgeInsets.only(left: 15, right: 15),
-              text: 'DESCRIPCIÓN DE LA CARGA',
-              icon: Icons.description,
-              keyboardType: TextInputType.text,
-              onChanged: (text) {
-                context.read<ClientMapBookingInfoBloc>().add(
-                  CargoTypeChanged(type: text)
-                );
-              },
-            ),
-            DropdownButtonFormField(
-              value: state.truckTypeRequired,
-              items: ['Camioneta', '3/4', 'Camión', 'Camión grande']              
-                  .map((type) => DropdownMenuItem(
-                        value: type,
-                        child: Text(type),
-                      ))
-                  .toList(),
-              onChanged: (value) {
-                context.read<ClientMapBookingInfoBloc>().add(
-                  TruckTypeChanged(type: value.toString())
-                );
-              },
-              decoration: InputDecoration(
-                labelText: 'Tipo de camión requerido',
-                prefixIcon: Icon(Icons.local_shipping),
-              ),
-            ),   
+            // DefaultTextField(
+            //   margin: EdgeInsets.only(left: 15, right: 15),
+            //   text: 'DESCRIPCIÓN DE LA CARGA',
+            //   icon: Icons.description,
+            //   keyboardType: TextInputType.text,
+            //   onChanged: (text) {
+            //     context.read<ClientMapBookingInfoBloc>().add(
+            //       CargoTypeChanged(type: text)
+            //     );
+            //   },
+            // ),
+            // DropdownButtonFormField(
+            //   value: state.truckTypeRequired,
+            //   items: ['Camioneta', '3/4', 'Camión', 'Camión grande']              
+            //       .map((type) => DropdownMenuItem(
+            //             value: type,
+            //             child: Text(type),
+            //           ))
+            //       .toList(),
+            //   onChanged: (value) {
+            //     context.read<ClientMapBookingInfoBloc>().add(
+            //       TruckTypeChanged(type: value.toString())
+            //     );
+            //   },
+            //   decoration: InputDecoration(
+            //     labelText: 'Tipo de camión requerido',
+            //     prefixIcon: Icon(Icons.local_shipping),
+            //   ),
+            // ),   
             // AYUDANTES
             // SwitchListTile(
             //   title: Text('Necesita ayudantes'),
@@ -194,10 +187,10 @@ class ClientMapBookingInfoContent extends StatelessWidget {
             //   },
             // ),
             _actionProfile(
-              'PUBLICAR CARGA',
+              'BUSCAR CONDUCTOR',
               Icons.search,
               () {
-                print('CLICK Publicar Carga');
+                print('CLICK SOLICITAR CONDUCTOR');
                 context.read<ClientMapBookingInfoBloc>().add(CreateClientRequest());
               }
             )

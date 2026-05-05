@@ -123,25 +123,7 @@ class DriverClientRequestsItem extends StatelessWidget {
                               Icons.route,
                             ),
                           ],
-                        ),
-                        Row(
-                          children: [
-                            _infoItem(
-                              "Camión",
-                              clientRequest?.truckType ?? '-',
-                              Icons.local_shipping,
-                            ),
-                          ],
-                        ),
-                        Row(
-                          children: [
-                            _infoItem(
-                              "Descripcion",
-                              '${clientRequest?.cargoType ?? '-'}',
-                              Icons.people,
-                            )
-                          ],
-                        ),
+                        ),                        
                       ],
                     ),
                   ),

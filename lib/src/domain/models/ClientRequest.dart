@@ -2,23 +2,21 @@ class ClientRequest {
   int? id;
   int idClient;
   double fareOffered;
-
   String pickupDescription;
   String destinationDescription;
-
   double pickupLat;
   double pickupLng;
   double destinationLat;
   double destinationLng;
-
-  // NUEVO
   double cargoWeight;
-  String cargoWeightUnit; // KG o TON
+  String cargoWeightUnit;
   String truckTypeRequired;
   String cargoType;
   bool helpersRequired;
   bool requiresCrane;
   bool fragileCargo;
+  String? paymentStatus;
+  String? status;
 
   ClientRequest({
     this.id,
@@ -37,12 +35,14 @@ class ClientRequest {
     required this.helpersRequired,
     required this.requiresCrane,
     required this.fragileCargo,
+    this.paymentStatus,
+    this.status,
   });
 
   factory ClientRequest.fromJson(Map<String, dynamic> json) => ClientRequest(
         id: json["id"],
-        idClient: json["id_client"],
-        fareOffered: double.parse(json['fareOffered'].toString()),
+        idClient: json["id_client"],        
+        fareOffered: double.parse(json['fare_offered'].toString()),
         pickupDescription: json["pickup_description"],
         destinationDescription: json["destination_description"],
         pickupLat: json["pickup_lat"]?.toDouble(),
@@ -56,6 +56,8 @@ class ClientRequest {
         helpersRequired: json["helpers_required"] ?? false,
         requiresCrane: json["requires_crane"] ?? false,
         fragileCargo: json["fragile_cargo"] ?? false,
+        paymentStatus: json["payment_status"],
+        status: json["status"],
       );
 
   Map<String, dynamic> toJson() => {

@@ -45,4 +45,28 @@ class CraneChanged extends DriverCarInfoEvent {
   CraneChanged({ required this.value });
 }
 
+class ModelChanged extends DriverCarInfoEvent {
+  final BlocFormItem model;
+  ModelChanged({required this.model});
+
+  @override
+  List<Object?> get props => [model];
+}
+
+class YearChanged extends DriverCarInfoEvent {
+  final BlocFormItem year;
+  YearChanged({required this.year});
+
+  @override
+  List<Object?> get props => [year];
+}
+
+class VehicleTypeChanged extends DriverCarInfoEvent {
+  final String type;
+  VehicleTypeChanged({required this.type});
+
+  @override
+  List<Object?> get props => [type];
+}
+
 class FormSubmit extends DriverCarInfoEvent {}

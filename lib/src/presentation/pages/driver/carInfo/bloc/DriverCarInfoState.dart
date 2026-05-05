@@ -6,33 +6,27 @@ import 'package:localdriver/src/presentation/utils/BlocFormItem.dart';
 class DriverCarInfoState extends Equatable {
 
   final int? idDriver;
+
   final BlocFormItem brand;
+  final BlocFormItem model;
+  final BlocFormItem year;
+
   final BlocFormItem plate;
   final BlocFormItem color;
 
-  final BlocFormItem maxWeight;
-  final String weightUnit;
-  final String truckType;
-  final BlocFormItem maxVolume;
-  final bool hasHelpers;
-  final bool hasCrane;
+  final String vehicleType;
 
   final Resource? response;
   final GlobalKey<FormState>? formKey;
 
   const DriverCarInfoState({
     this.idDriver,
-    this.brand = const BlocFormItem(error: 'Ingresa la marca'),
-    this.plate = const BlocFormItem(error: 'Ingresa la placa'),
-    this.color = const BlocFormItem(error: 'Ingresa el color'),
-
-    this.maxWeight = const BlocFormItem(error: 'Ingresa el peso máximo'),
-    this.weightUnit = 'KG',
-    this.truckType = 'Camioneta',
-    this.maxVolume = const BlocFormItem(),
-    this.hasHelpers = false,
-    this.hasCrane = false,
-
+    this.brand = const BlocFormItem(value: '', error: null),
+    this.model = const BlocFormItem(value: '', error: null),
+    this.year = const BlocFormItem(value: '', error: null),
+    this.plate = const BlocFormItem(value: '', error: null),
+    this.color = const BlocFormItem(value: '', error: null),
+    this.vehicleType = 'UberX',
     this.formKey,
     this.response,
   });
@@ -40,28 +34,22 @@ class DriverCarInfoState extends Equatable {
   DriverCarInfoState copyWith({
     int? idDriver,
     BlocFormItem? brand,
+    BlocFormItem? model,
+    BlocFormItem? year,
     BlocFormItem? plate,
     BlocFormItem? color,
-    BlocFormItem? maxWeight,
-    String? weightUnit,
-    String? truckType,
-    BlocFormItem? maxVolume,
-    bool? hasHelpers,
-    bool? hasCrane,
+    String? vehicleType,
     GlobalKey<FormState>? formKey,
     Resource? response,
   }) {
     return DriverCarInfoState(
       idDriver: idDriver ?? this.idDriver,
       brand: brand ?? this.brand,
+      model: model ?? this.model,
+      year: year ?? this.year,
       plate: plate ?? this.plate,
       color: color ?? this.color,
-      maxWeight: maxWeight ?? this.maxWeight,
-      weightUnit: weightUnit ?? this.weightUnit,
-      truckType: truckType ?? this.truckType,
-      maxVolume: maxVolume ?? this.maxVolume,
-      hasHelpers: hasHelpers ?? this.hasHelpers,
-      hasCrane: hasCrane ?? this.hasCrane,
+      vehicleType: vehicleType ?? this.vehicleType,
       formKey: formKey ?? this.formKey,
       response: response ?? this.response,
     );
@@ -71,14 +59,11 @@ class DriverCarInfoState extends Equatable {
   List<Object?> get props => [
         idDriver,
         brand,
+        model,
+        year,
         plate,
         color,
-        maxWeight,
-        weightUnit,
-        truckType,
-        maxVolume,
-        hasHelpers,
-        hasCrane,
+        vehicleType,
         response,
       ];
 }
